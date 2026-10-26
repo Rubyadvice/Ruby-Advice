@@ -1030,6 +1030,19 @@ export default function App() {
   const [personaCompleted, setPersonaCompleted] = useState(false);
   const [personaStep, setPersonaStep] = useState(0);
 
+  // Generate random teaser content on every page refresh
+  const randomTeasers = useMemo(() => {
+    const quote = CURATED_QUOTES[Math.floor(Math.random() * CURATED_QUOTES.length)];
+    const advice = TOP_20_ADVICE[Math.floor(Math.random() * TOP_20_ADVICE.length)];
+    const quiz = BEHAVIOUR_QUIZ_QUESTIONS[Math.floor(Math.random() * BEHAVIOUR_QUIZ_QUESTIONS.length)];
+    const flag = FLAGS_DECK[Math.floor(Math.random() * FLAGS_DECK.length)];
+    const emotion = EMOTIONS_DECK[Math.floor(Math.random() * EMOTIONS_DECK.length)];
+    const term = LOVE_TERMS_LEXICON[Math.floor(Math.random() * LOVE_TERMS_LEXICON.length)];
+    const persona = PERSONA_QUESTIONS[Math.floor(Math.random() * PERSONA_QUESTIONS.length)];
+
+    return { quote, advice, quiz, flag, emotion, term, persona };
+  }, []);
+
   const filteredLexiconPool = useMemo(() => {
     if (lexiconCategoryFilter === 'All') return LOVE_TERMS_LEXICON;
     if (lexiconCategoryFilter === 'Saved') {
@@ -1403,7 +1416,7 @@ export default function App() {
               <div onClick={() => setActiveTab('quotes')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-amber-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><BookOpen className="w-5 h-5 text-amber-500" /><span className="text-[10px] uppercase font-bold text-amber-500 tracking-wider">Quotes & Library</span></div>
-                  <p className={`text-sm font-serif italic leading-relaxed ${darkMode ? 'text-amber-100/90' : 'text-slate-700'}`}>"True empathy means stepping into your partner's internal world and validating their feelings..."</p>
+                  <p className={`text-sm font-serif italic leading-relaxed line-clamp-4 ${darkMode ? 'text-amber-100/90' : 'text-slate-700'}`}>"{randomTeasers.quote.quote}"</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-amber-500 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Explore Library <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1412,7 +1425,7 @@ export default function App() {
               <div onClick={() => setActiveTab('fivews')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-indigo-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><Compass className="w-5 h-5 text-indigo-400" /><span className="text-[10px] uppercase font-bold text-indigo-400 tracking-wider">Advice</span></div>
-                  <p className={`text-sm font-medium leading-relaxed ${themeMutedText}`}>Are you communicating your needs openly, or expecting mind-reading? Compare the Top 10 Dos & Don'ts.</p>
+                  <p className={`text-sm font-medium leading-relaxed line-clamp-4 ${themeMutedText}`}><strong>Priority #{randomTeasers.advice.rank}:</strong> {randomTeasers.advice.title} — {randomTeasers.advice.description}</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-indigo-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Read Advice <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1421,7 +1434,7 @@ export default function App() {
               <div onClick={() => setActiveTab('quiz')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-sky-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><Activity className="w-5 h-5 text-sky-400" /><span className="text-[10px] uppercase font-bold text-sky-400 tracking-wider">Behaviour Quiz</span></div>
-                  <p className={`text-sm font-medium leading-relaxed ${themeMutedText}`}>Diagnose your relationship's current state and get prioritized book prescriptions for lagging areas.</p>
+                  <p className={`text-sm font-medium leading-relaxed line-clamp-4 ${themeMutedText}`}>Scenario: "{randomTeasers.quiz.scenario}"</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-sky-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Take Quiz <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1436,7 +1449,7 @@ export default function App() {
                     </div>
                     <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">Rubies</span>
                   </div>
-                  <p className={`text-sm font-medium leading-relaxed ${themeMutedText}`}>Trait: Transactional Attitudes. Is keeping a 'tit-for-tat' scoreboard a Fractured Black Ruby or Radiant Green Ruby?</p>
+                  <p className={`text-sm font-medium leading-relaxed line-clamp-4 ${themeMutedText}`}>Trait ({randomTeasers.flag.gender}): "{randomTeasers.flag.trait}" — Is this a Fractured Black Ruby or Radiant Green Ruby?</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-emerald-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Swipe Rubies <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1445,7 +1458,7 @@ export default function App() {
               <div onClick={() => setActiveTab('emotions')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-fuchsia-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><Layers className="w-5 h-5 text-fuchsia-400" /><span className="text-[10px] uppercase font-bold text-fuchsia-400 tracking-wider">Emotion Atlas</span></div>
-                  <p className={`text-sm font-medium leading-relaxed ${themeMutedText}`}>#02 Disgust: Triggered by emotional unavailability. See how 22 emotions shift masculine & feminine polarity.</p>
+                  <p className={`text-sm font-medium leading-relaxed line-clamp-4 ${themeMutedText}`}>#{randomTeasers.emotion.number} {randomTeasers.emotion.name}: {randomTeasers.emotion.womenFactors.increase || randomTeasers.emotion.menFactors.increase}</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-fuchsia-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">View Emotions <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1454,7 +1467,7 @@ export default function App() {
               <div onClick={() => setActiveTab('lexicon')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-teal-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><Waves className="w-5 h-5 text-teal-400" /><span className="text-[10px] uppercase font-bold text-teal-400 tracking-wider">Lexicon of Love</span></div>
-                  <p className={`text-sm font-medium leading-relaxed ${themeMutedText}`}>Ya'aburnee (Arabic): The hope that you will outlive your loved one. Discover 120 untranslatable words.</p>
+                  <p className={`text-sm font-medium leading-relaxed line-clamp-4 ${themeMutedText}`}>{randomTeasers.term.term} ({randomTeasers.term.origin}): "{randomTeasers.term.definition}"</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-teal-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn Terms <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1463,7 +1476,7 @@ export default function App() {
               <div onClick={() => setActiveTab('persona')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-cyan-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full lg:col-span-2`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><UserCircle className="w-5 h-5 text-cyan-400" /><span className="text-[10px] uppercase font-bold text-cyan-400 tracking-wider">Emotional Persona</span></div>
-                  <p className={`text-sm font-medium leading-relaxed ${themeMutedText}`}>Do you react with Passion, Vigilance, Empathy, Purity, or Joy? Complete the 15-question archetype quiz.</p>
+                  <p className={`text-sm font-medium leading-relaxed line-clamp-4 ${themeMutedText}`}>Archetype Question: "{randomTeasers.persona.text}"</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-cyan-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Find Archetype <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
