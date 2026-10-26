@@ -960,6 +960,21 @@ function TierCommemorativeGraphic({ score, tier, timestamp, darkMode, sourceLabe
 export default function App() {
   const [activeTab, setActiveTab] = useState('sanctuary');
   const [darkMode, setDarkMode] = useState(true);
+
+  // Synchronize Safari top bar color with darkMode state
+  useEffect(() => {
+    const themeColor = darkMode ? '#08071E' : '#F6F5F0';
+    let metaTag = document.querySelector('meta[name="theme-color"]');
+
+    if (!metaTag) {
+      metaTag = document.createElement('meta');
+      metaTag.setAttribute('name', 'theme-color');
+      document.head.appendChild(metaTag);
+    }
+
+    metaTag.setAttribute('content', themeColor);
+  }, [darkMode]);
+
   const [selectedTableBook, setSelectedTableBook] = useState(null);
 
   // Weekly Check-In State
