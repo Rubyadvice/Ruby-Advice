@@ -1259,16 +1259,40 @@ export default function App() {
     setPersonaAnswers({}); setPersonaCompleted(false); setPersonaStep(0);
   };
 
-  const navItems = [
-    { id: 'sanctuary', label: 'For You', icon: Sparkles },
-    { id: 'checkin', label: 'Weekly Check-In', icon: CheckCircle2 },
-    { id: 'quotes', label: 'Quotes & Library', icon: BookOpen },
-    { id: 'fivews', label: 'Advice', icon: Compass },
-    { id: 'quiz', label: 'Behaviour Quiz', icon: Activity },
-    { id: 'flags', label: 'Rubies', icon: Gem },
-    { id: 'emotions', label: 'Emotion Atlas', icon: Layers },
-    { id: 'lexicon', label: 'Lexicon of Love', icon: Waves },
-    { id: 'persona', label: 'Emotional Persona', icon: UserCircle }
+  const navGroups = [
+    {
+      label: 'Home',
+      icon: Sparkles,
+      items: [
+        { id: 'sanctuary', label: 'For You', icon: Sparkles, description: 'Return to your home sanctuary dashboard' }
+      ]
+    },
+    {
+      label: 'Assessments',
+      icon: Activity,
+      items: [
+        { id: 'checkin', label: 'Weekly Check-In', icon: CheckCircle2, description: 'Rate your partnership harmony' },
+        { id: 'quiz', label: 'Behaviour Quiz', icon: Activity, description: 'Diagnose relationship dynamics' },
+        { id: 'persona', label: 'Emotional Persona', icon: UserCircle, description: 'Discover your archetype' }
+      ]
+    },
+    {
+      label: 'Library & Wisdom',
+      icon: BookOpen,
+      items: [
+        { id: 'quotes', label: 'Quotes & Library', icon: BookOpen, description: 'Search curated relationship texts' },
+        { id: 'fivews', label: 'Advice', icon: Compass, description: 'Explore male & female perspectives' },
+        { id: 'lexicon', label: 'Lexicon of Love', icon: Waves, description: 'Discover untranslatable words' }
+      ]
+    },
+    {
+      label: 'Interactive Tools',
+      icon: Gem,
+      items: [
+        { id: 'emotions', label: 'Emotion Atlas', icon: Layers, description: 'Explore 22 relational emotions' },
+        { id: 'flags', label: 'Rubies', icon: Gem, description: 'Swipe green & black behavioural rubies' }
+      ]
+    }
   ];
 
   const themeSurface = darkMode ? 'bg-[#130F26]/90 border-indigo-500/25 text-stone-100 shadow-lg shadow-black/25' : 'bg-[#FFFFFF]/95 border-stone-200/90 text-slate-900 shadow-sm';
@@ -1298,15 +1322,43 @@ export default function App() {
             </button>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 overflow-x-auto no-scrollbar">
-          <nav className="flex items-center gap-1.5 py-2 min-w-max">
-            {navItems.map(item => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2">
+          <nav className="flex flex-wrap items-center gap-2 sm:gap-4">
+            {navGroups.map(group => {
+              const GroupIcon = group.icon;
+              const isActiveGroup = group.items.some(i => i.id === activeTab);
+              
               return (
-                <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${isActive ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF6B6B] text-white shadow-md' : darkMode ? 'text-indigo-200/80 hover:bg-indigo-950/70 hover:text-white' : 'text-slate-600 hover:bg-stone-200/70 hover:text-slate-900'}`}>
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-200' : 'text-pink-500'}`} /> {item.label}
-                </button>
+                <div key={group.label} className="relative group">
+                  <button className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${isActiveGroup ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF6B6B] text-white shadow-md' : darkMode ? 'text-indigo-200/80 hover:bg-indigo-950/70 hover:text-white' : 'text-slate-600 hover:bg-stone-200/70 hover:text-slate-900'}`}>
+                    <GroupIcon className={`w-4 h-4 ${isActiveGroup ? 'text-amber-200' : 'text-pink-500'}`} /> {group.label}
+                  </button>
+                  
+                  {/* Dropdown Menu Block */}
+                  <div className="absolute left-0 top-full pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                    <div className={`w-64 rounded-2xl border shadow-xl p-2 flex flex-col gap-1 ${darkMode ? 'bg-[#130F26]/95 border-indigo-500/20 backdrop-blur-xl' : 'bg-white border-stone-200 backdrop-blur-xl shadow-stone-200/50'}`}>
+                      {group.items.map(item => {
+                        const ItemIcon = item.icon;
+                        const isItemActive = activeTab === item.id;
+                        return (
+                          <button 
+                            key={item.id} 
+                            onClick={() => setActiveTab(item.id)} 
+                            className={`w-full text-left flex items-start gap-3 p-3 rounded-xl transition-all ${isItemActive ? (darkMode ? 'bg-indigo-500/20 text-white' : 'bg-pink-50 text-slate-900') : (darkMode ? 'hover:bg-indigo-500/10 text-indigo-100/80 hover:text-white' : 'hover:bg-stone-100 text-slate-600 hover:text-slate-900')}`}
+                          >
+                            <div className={`mt-0.5 shrink-0 rounded-lg p-1.5 ${isItemActive ? 'bg-gradient-to-br from-[#5A28FF] to-[#FF176B] text-white shadow-sm' : (darkMode ? 'bg-indigo-950/50 text-pink-400' : 'bg-stone-100 text-pink-500')}`}>
+                               <ItemIcon className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="font-semibold text-sm">{item.label}</div>
+                              <div className={`text-[10px] leading-snug mt-0.5 ${darkMode ? 'text-indigo-300/60' : 'text-slate-500'}`}>{item.description}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </nav>
