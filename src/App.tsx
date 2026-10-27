@@ -1286,9 +1286,9 @@ export default function App() {
   const relationshipModules = [
     { id: 'checkin', label: 'Weekly Check-In', icon: CheckCircle2, description: '20-point partnership harmony scoring' },
     { id: 'quotes', label: 'Quotes & Library', icon: BookOpen, description: 'Curated wisdom & 30 reference volumes' },
-    { id: 'fivews', label: 'Advice Compass', icon: Compass, description: "5 W's perspective & Dos and Don'ts" },
+    { id: 'fivews', label: 'Advice', icon: Compass, description: "5 W's perspective & Dos and Don'ts" },
     { id: 'quiz', label: 'Behaviour Quiz', icon: Activity, description: 'Diagnostic test & book prescriptions' },
-    { id: 'flags', label: 'Rubies Trait Deck', icon: Gem, description: 'Green & black behavioral rubies' },
+    { id: 'flags', label: 'Rubies', icon: Gem, description: 'Green & black behavioral rubies' },
     { id: 'emotions', label: 'Emotion Atlas', icon: Layers, description: 'Masculine & feminine triggers & calming' },
     { id: 'lexicon', label: 'Lexicon of Love', icon: Waves, description: 'Global untranslatable relationship terms' },
     { id: 'persona', label: 'Emotional Persona', icon: UserCircle, description: 'Discover your crystalline emotional archetype' }
@@ -1435,7 +1435,7 @@ export default function App() {
 
         {/* Navigation Tabs Bar */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2.5">
-          <nav className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar">
+          <nav className="flex items-center gap-2 sm:gap-3 relative overflow-visible">
             {/* For You Tab */}
             <button
               onClick={() => {
@@ -1457,7 +1457,7 @@ export default function App() {
             {/* Consolidated Relationships Hub with Dropdown */}
             <div
               ref={relDropdownRef}
-              className="relative group"
+              className="relative"
               onMouseEnter={() => setRelDropdownOpen(true)}
               onMouseLeave={() => setRelDropdownOpen(false)}
             >
@@ -1483,75 +1483,75 @@ export default function App() {
                 )}
                 <ChevronRight
                   className={`w-3.5 h-3.5 transition-transform duration-200 opacity-75 ${
-                    relDropdownOpen ? 'rotate-90' : 'group-hover:rotate-90'
+                    relDropdownOpen ? 'rotate-90' : ''
                   }`}
                 />
               </button>
 
-              {/* Mega Dropdown Menu with zero hover dead zone */}
-              <div
-                className={`absolute left-0 top-full pt-1.5 transition-all duration-200 z-50 ${
-                  relDropdownOpen
-                    ? 'opacity-100 translate-y-0 pointer-events-auto visible'
-                    : 'opacity-0 translate-y-2 pointer-events-none invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-hover:visible'
-                }`}
-              >
+              {/* Floating Dropdown Menu */}
+              {relDropdownOpen && (
                 <div
-                  className={`w-[22rem] sm:w-[38rem] rounded-3xl border shadow-2xl p-3.5 backdrop-blur-2xl ${
-                    isDark ? 'bg-[#120F24]/95 border-indigo-500/30 text-stone-100' : 'bg-white/95 border-stone-200 text-slate-900'
-                  }`}
+                  className="absolute left-0 top-full mt-1.5 z-50 animate-fadeIn"
+                  onMouseEnter={() => setRelDropdownOpen(true)}
+                  onMouseLeave={() => setRelDropdownOpen(false)}
                 >
-                  <div className="flex items-center justify-between px-3 py-2 mb-1.5 border-b border-indigo-500/15">
-                    <span className="text-xs font-bold uppercase tracking-wider text-pink-500">
-                      Relationships Diagnostic Suite
-                    </span>
-                    <span className={`text-[11px] ${themeMutedText}`}>8 Core Modules</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                    {relationshipModules.map(module => {
-                      const Icon = module.icon;
-                      const isActive = activeTab === module.id;
-                      return (
-                        <button
-                          key={module.id}
-                          type="button"
-                          onClick={() => {
-                            setActiveTab(module.id);
-                            setRelDropdownOpen(false);
-                          }}
-                          className={`w-full text-left flex items-start gap-3 p-2.5 rounded-2xl transition-all cursor-pointer ${
-                            isActive
-                              ? isDark
-                                ? 'bg-indigo-500/25 border border-pink-400/40 text-white'
-                                : 'bg-pink-50 border border-pink-300 text-slate-900'
-                              : isDark
-                              ? 'hover:bg-white/5 text-indigo-100/80'
-                              : 'hover:bg-stone-100 text-slate-700'
-                          }`}
-                        >
-                          <div
-                            className={`mt-0.5 shrink-0 rounded-xl p-2 ${
+                  <div
+                    className={`w-[22rem] sm:w-[38rem] rounded-3xl border shadow-2xl p-3.5 backdrop-blur-2xl ${
+                      isDark ? 'bg-[#120F24]/95 border-indigo-500/30 text-stone-100' : 'bg-white/95 border-stone-200 text-slate-900'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between px-3 py-2 mb-1.5 border-b border-indigo-500/15">
+                      <span className="text-xs font-bold uppercase tracking-wider text-pink-500">
+                        Relationships Hub
+                      </span>
+                      <span className={`text-[11px] ${themeMutedText}`}>8 Modules</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                      {relationshipModules.map(module => {
+                        const Icon = module.icon;
+                        const isActive = activeTab === module.id;
+                        return (
+                          <button
+                            key={module.id}
+                            type="button"
+                            onClick={() => {
+                              setActiveTab(module.id);
+                              setRelDropdownOpen(false);
+                            }}
+                            className={`w-full text-left flex items-start gap-3 p-2.5 rounded-2xl transition-all cursor-pointer ${
                               isActive
-                                ? 'bg-gradient-to-br from-[#5A28FF] to-[#FF176B] text-white shadow-md'
+                                ? isDark
+                                  ? 'bg-indigo-500/25 border border-pink-400/40 text-white'
+                                  : 'bg-pink-50 border border-pink-300 text-slate-900'
                                 : isDark
-                                ? 'bg-[#1D1740] text-pink-400'
-                                : 'bg-stone-100 text-pink-500'
+                                ? 'hover:bg-white/5 text-indigo-100/80'
+                                : 'hover:bg-stone-100 text-slate-700'
                             }`}
                           >
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <div className="font-semibold text-xs sm:text-sm">{module.label}</div>
-                            <div className={`text-[11px] leading-snug mt-0.5 line-clamp-1 ${themeMutedText}`}>
-                              {module.description}
+                            <div
+                              className={`mt-0.5 shrink-0 rounded-xl p-2 ${
+                                isActive
+                                  ? 'bg-gradient-to-br from-[#5A28FF] to-[#FF176B] text-white shadow-md'
+                                  : isDark
+                                  ? 'bg-[#1D1740] text-pink-400'
+                                  : 'bg-stone-100 text-pink-500'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
                             </div>
-                          </div>
-                        </button>
-                      );
-                    })}
+                            <div>
+                              <div className="font-semibold text-xs sm:text-sm">{module.label}</div>
+                              <div className={`text-[11px] leading-snug mt-0.5 line-clamp-1 ${themeMutedText}`}>
+                                {module.description}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Philosophy Navigation Heading */}
