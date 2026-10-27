@@ -225,6 +225,27 @@ function FacetedRubyLogo({ colorIndex = 0, darkMode, size = 44, onClick }) {
             <stop offset="35%" stopColor={p.c2} />
             <stop offset="80%" stopColor={p.c3} />
             <stop offset="100%" stopColor={p.c4} />
+          <linearGradient id="leftLobeGrad" x1="15" y1="22" x2="60" y2="95" gradientUnits="userSpaceOnUse">
+            <s// ... existing code ...
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    // Applies a strict light, monochrome color palette
+    <div className="min-h-screen bg-white text-slate-900 grayscale selection:bg-slate-300">
+      <TopNavigation />
+      <main className="max-w-4xl mx-auto p-4">
+        {children}
+      </main>
+    </div>
+  );
+} offset="0%" stopColor="#6E3AFF" />
+            <stop offset="50%" stopColor="#4618F2" />
+            <stop offset="100%" stopColor="#1B75FF" />
+          </linearGradient>
+          <linearGradient id="leftInnerFold" x1="32" y1="52" x2="60" y2="96" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#1222C9" />
+            <stop offset="55%" stopColor="#3B10E6" />
+            <stop offset="100%" stopColor="#4F7BFF" />
           </linearGradient>
           <linearGradient id={`facetGradL-${p.id}`} x1="14" y1="39" x2="50" y2="87" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor={p.c2} />
