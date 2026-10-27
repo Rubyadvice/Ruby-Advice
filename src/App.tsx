@@ -1176,6 +1176,32 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [rubyColorIndex, setRubyColorIndex] = useState(0);
 
+  // Relationships Dropdown click & hover state + click-outside ref
+  const [relDropdownOpen, setRelDropdownOpen] = useState(false);
+  const relDropdownRef = useRef(null);
+
+  // Handle outside click & escape key to dismiss the Relationships dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (relDropdownRef.current && !relDropdownRef.current.contains(event.target)) {
+        setRelDropdownOpen(false);
+      }
+    }
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setRelDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   // Modal State for 30-Book Grid
   const [selectedBook, setSelectedBook] = useState(null);
   const [bookSearch, setBookSearch] = useState('');
@@ -1412,7 +1438,10 @@ export default function App() {
           <nav className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar">
             {/* For You Tab */}
             <button
-              onClick={() => setActiveTab('sanctuary')}
+              onClick={() => {
+                setActiveTab('sanctuary');
+                setRelDropdownOpen(false);
+              }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shrink-0 ${
                 activeTab === 'sanctuary'
                   ? 'bg-gradient-to-r from-[#5A28FF] to-[#FF176B] text-white shadow-md'
@@ -1426,9 +1455,18 @@ export default function App() {
             </button>
 
             {/* Consolidated Relationships Hub with Dropdown */}
-            <div className="relative group">
+            <div
+              ref={relDropdownRef}
+              className="relative group"
+              onMouseEnter={() => setRelDropdownOpen(true)}
+              onMouseLeave={() => setRelDropdownOpen(false)}
+            >
               <button
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shrink-0 ${
+                type="button"
+                onClick={() => setRelDropdownOpen(prev => !prev)}
+                aria-expanded={relDropdownOpen}
+                aria-haspopup="true"
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shrink-0 select-none cursor-pointer ${
                   isRelationshipActive
                     ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF6B6B] text-white shadow-md'
                     : isDark
@@ -1443,11 +1481,21 @@ export default function App() {
                     • {currentModule.label}
                   </span>
                 )}
-                <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-90 opacity-75" />
+                <ChevronRight
+                  className={`w-3.5 h-3.5 transition-transform duration-200 opacity-75 ${
+                    relDropdownOpen ? 'rotate-90' : 'group-hover:rotate-90'
+                  }`}
+                />
               </button>
 
-              {/* Mega Dropdown Menu */}
-              <div className="absolute left-0 top-full pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
+              {/* Mega Dropdown Menu with zero hover dead zone */}
+              <div
+                className={`absolute left-0 top-full pt-1.5 transition-all duration-200 z-50 ${
+                  relDropdownOpen
+                    ? 'opacity-100 translate-y-0 pointer-events-auto visible'
+                    : 'opacity-0 translate-y-2 pointer-events-none invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-hover:visible'
+                }`}
+              >
                 <div
                   className={`w-[22rem] sm:w-[38rem] rounded-3xl border shadow-2xl p-3.5 backdrop-blur-2xl ${
                     isDark ? 'bg-[#120F24]/95 border-indigo-500/30 text-stone-100' : 'bg-white/95 border-stone-200 text-slate-900'
@@ -1466,8 +1514,12 @@ export default function App() {
                       return (
                         <button
                           key={module.id}
-                          onClick={() => setActiveTab(module.id)}
-                          className={`w-full text-left flex items-start gap-3 p-2.5 rounded-2xl transition-all ${
+                          type="button"
+                          onClick={() => {
+                            setActiveTab(module.id);
+                            setRelDropdownOpen(false);
+                          }}
+                          className={`w-full text-left flex items-start gap-3 p-2.5 rounded-2xl transition-all cursor-pointer ${
                             isActive
                               ? isDark
                                 ? 'bg-indigo-500/25 border border-pink-400/40 text-white'
@@ -1504,7 +1556,10 @@ export default function App() {
 
             {/* Philosophy Navigation Heading */}
             <button
-              onClick={() => setActiveTab('philosophy')}
+              onClick={() => {
+                setActiveTab('philosophy');
+                setRelDropdownOpen(false);
+              }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shrink-0 ${
                 activeTab === 'philosophy'
                   ? 'bg-gradient-to-r from-[#5A28FF] via-[#7F00FF] to-[#D81B9E] text-white shadow-md'
@@ -1519,7 +1574,10 @@ export default function App() {
 
             {/* Religion Navigation Heading */}
             <button
-              onClick={() => setActiveTab('religion')}
+              onClick={() => {
+                setActiveTab('religion');
+                setRelDropdownOpen(false);
+              }}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shrink-0 ${
                 activeTab === 'religion'
                   ? 'bg-gradient-to-r from-[#FF8008] via-[#FF176B] to-[#7F00FF] text-white shadow-md'
