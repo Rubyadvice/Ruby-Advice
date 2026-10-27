@@ -55,56 +55,260 @@ import {
 } from 'lucide-react';
 
 // ============================================================================
-// CUSTOM SVG ICONS 
+// CUSTOM SVG ICONS & FACETED RUBY GEMSTONES
 // ============================================================================
 
-function RubyGradientLogo({ darkMode, size = 44, className = '' }) {
+export const RUBY_GEM_PALETTES = [
+  {
+    id: 'gem-magenta',
+    name: 'Magenta Ruby (Top-Left Default)',
+    glow: 'rgba(255, 16, 128, 0.65)',
+    borderGlow: '#FF1080',
+    appBgDark: '#0D0518',
+    appBgLight: '#FFF0F7',
+    c1: '#FF40B0', // Highlight top
+    c2: '#FF007F', // Mid neon
+    c3: '#D00068', // Deep body
+    c4: '#750040', // Shadow facet
+    c5: '#3D0022', // Darkest interior
+    strokeColor: '#FFA3DF',
+    lineGlow: '#FF007F'
+  },
+  {
+    id: 'gem-sapphire',
+    name: 'Sapphire Cobalt (Top-Center)',
+    glow: 'rgba(0, 110, 255, 0.65)',
+    borderGlow: '#0066FF',
+    appBgDark: '#040B1D',
+    appBgLight: '#F0F6FF',
+    c1: '#60A5FA',
+    c2: '#0066FF',
+    c3: '#0040C7',
+    c4: '#002580',
+    c5: '#001447',
+    strokeColor: '#BAE6FD',
+    lineGlow: '#0070F3'
+  },
+  {
+    id: 'gem-emerald',
+    name: 'Neon Emerald (Top-Right)',
+    glow: 'rgba(0, 235, 120, 0.65)',
+    borderGlow: '#00E676',
+    appBgDark: '#03140C',
+    appBgLight: '#F0FDF4',
+    c1: '#6EE7B7',
+    c2: '#00E676',
+    c3: '#059669',
+    c4: '#047857',
+    c5: '#022C22',
+    strokeColor: '#D1FAE5',
+    lineGlow: '#10B981'
+  },
+  {
+    id: 'gem-crimson',
+    name: 'Crimson Scarlet (Middle-Left)',
+    glow: 'rgba(255, 20, 60, 0.65)',
+    borderGlow: '#FF1744',
+    appBgDark: '#170408',
+    appBgLight: '#FFF1F2',
+    c1: '#FDA4AF',
+    c2: '#FF1744',
+    c3: '#D50000',
+    c4: '#880000',
+    c5: '#450000',
+    strokeColor: '#FFE4E6',
+    lineGlow: '#F43F5E'
+  },
+  {
+    id: 'gem-cyan',
+    name: 'Aqua Cyan (Middle-Center)',
+    glow: 'rgba(0, 230, 255, 0.65)',
+    borderGlow: '#00E5FF',
+    appBgDark: '#03151D',
+    appBgLight: '#ECFEFF',
+    c1: '#67E8F9',
+    c2: '#00E5FF',
+    c3: '#0891B2',
+    c4: '#0E7490',
+    c5: '#083344',
+    strokeColor: '#CFFAFE',
+    lineGlow: '#06B6D4'
+  },
+  {
+    id: 'gem-amethyst',
+    name: 'Amethyst Violet (Middle-Right)',
+    glow: 'rgba(175, 80, 255, 0.65)',
+    borderGlow: '#A855F7',
+    appBgDark: '#120521',
+    appBgLight: '#FAF5FF',
+    c1: '#D8B4FE',
+    c2: '#A855F7',
+    c3: '#7E22CE',
+    c4: '#581C87',
+    c5: '#3B0764',
+    strokeColor: '#F3E8FF',
+    lineGlow: '#9333EA'
+  },
+  {
+    id: 'gem-gold',
+    name: 'Champagne Gold (Bottom-Left)',
+    glow: 'rgba(255, 185, 30, 0.65)',
+    borderGlow: '#F59E0B',
+    appBgDark: '#1A1104',
+    appBgLight: '#FFFBEB',
+    c1: '#FDE68A',
+    c2: '#F59E0B',
+    c3: '#B45309',
+    c4: '#78350F',
+    c5: '#451A03',
+    strokeColor: '#FEF3C7',
+    lineGlow: '#D97706'
+  },
+  {
+    id: 'gem-diamond-ice',
+    name: 'Platinum Ice Diamond (Bottom-Center)',
+    glow: 'rgba(220, 235, 255, 0.65)',
+    borderGlow: '#E2E8F0',
+    appBgDark: '#0B0F19',
+    appBgLight: '#F8FAFC',
+    c1: '#FFFFFF',
+    c2: '#E2E8F0',
+    c3: '#94A3B8',
+    c4: '#475569',
+    c5: '#1E293B',
+    strokeColor: '#FFFFFF',
+    lineGlow: '#CBD5E1'
+  },
+  {
+    id: 'gem-rose-gold',
+    name: 'Rose Coral (Bottom-Right)',
+    glow: 'rgba(255, 120, 150, 0.65)',
+    borderGlow: '#FB7185',
+    appBgDark: '#18070F',
+    appBgLight: '#FFF1F4',
+    c1: '#FECDD3',
+    c2: '#FB7185',
+    c3: '#E11D48',
+    c4: '#9F1239',
+    c5: '#4C0519',
+    strokeColor: '#FFE4E6',
+    lineGlow: '#F43F5E'
+  }
+];
+
+function FacetedRubyLogo({ colorIndex = 0, darkMode, size = 44, onClick, className = '' }) {
+  const p = RUBY_GEM_PALETTES[colorIndex] || RUBY_GEM_PALETTES[0];
+
   return (
     <div
+      onClick={onClick}
       style={{ width: size, height: size }}
-      className={`relative rounded-[24%] flex items-center justify-center shadow-md transition-colors duration-500 select-none overflow-hidden ${
+      title="Click to cycle ruby gem color!"
+      className={`relative rounded-[24%] flex items-center justify-center cursor-pointer select-none overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 group ${
         darkMode
-          ? 'bg-[#080724] border border-indigo-500/30 shadow-indigo-950/60'
-          : 'bg-[#F5F4F0] border border-stone-200/90 shadow-stone-300/60'
+          ? 'border'
+          : 'border shadow-md'
       } ${className}`}
     >
-      <svg viewBox="0 0 120 120" className="w-[82%] h-[82%] drop-shadow-sm" fill="none">
+      {/* Background Squircle container with themed glow */}
+      <div
+        className="absolute inset-0 rounded-[24%] transition-colors duration-500"
+        style={{
+          backgroundColor: darkMode ? p.appBgDark : p.appBgLight,
+          borderColor: p.borderGlow,
+          boxShadow: `0 0 16px ${p.glow}`
+        }}
+      />
+
+      {/* Internal radiant aura */}
+      <div
+        className="absolute inset-2 rounded-full blur-md opacity-60 group-hover:opacity-90 transition-opacity pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${p.c2}88 0%, ${p.c4}22 65%, transparent 80%)` }}
+      />
+
+      {/* Brilliant Cut Gemstone SVG matching reference proportions */}
+      <svg
+        viewBox="0 0 100 100"
+        className="w-[84%] h-[84%] relative z-10 drop-shadow-md transition-transform duration-300 group-hover:scale-105"
+        fill="none"
+      >
         <defs>
-          <linearGradient id="leftLobeGrad" x1="15" y1="22" x2="60" y2="95" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#6E3AFF" />
-            <stop offset="50%" stopColor="#4618F2" />
-            <stop offset="100%" stopColor="#1B75FF" />
+          <linearGradient id={`facetGradCenter-${p.id}`} x1="50" y1="23" x2="50" y2="87" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor={p.c1} />
+            <stop offset="35%" stopColor={p.c2} />
+            <stop offset="80%" stopColor={p.c3} />
+            <stop offset="100%" stopColor={p.c4} />
           </linearGradient>
-          <linearGradient id="leftInnerFold" x1="32" y1="52" x2="60" y2="96" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#1222C9" />
-            <stop offset="55%" stopColor="#3B10E6" />
-            <stop offset="100%" stopColor="#4F7BFF" />
+          <linearGradient id={`facetGradL-${p.id}`} x1="14" y1="39" x2="50" y2="87" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor={p.c2} />
+            <stop offset="60%" stopColor={p.c4} />
+            <stop offset="100%" stopColor={p.c5} />
           </linearGradient>
-          <linearGradient id="rightLobeGrad" x1="95" y1="22" x2="58" y2="75" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#FF9E6D" />
-            <stop offset="55%" stopColor="#FFAE82" />
-            <stop offset="100%" stopColor="#FF6B8B" />
+          <linearGradient id={`facetGradR-${p.id}`} x1="86" y1="39" x2="50" y2="87" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor={p.c1} />
+            <stop offset="50%" stopColor={p.c3} />
+            <stop offset="100%" stopColor={p.c5} />
           </linearGradient>
-          <linearGradient id="centerFoldGrad" x1="60" y1="36" x2="88" y2="78" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#EC407A" />
-            <stop offset="100%" stopColor="#FF9482" />
-          </linearGradient>
-          <linearGradient id="bottomRibbonGrad" x1="48" y1="98" x2="94" y2="62" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#D81B9E" />
-            <stop offset="45%" stopColor="#FF176B" />
-            <stop offset="100%" stopColor="#E61556" />
+          <linearGradient id={`tableHighlight-${p.id}`} x1="30" y1="23" x2="70" y2="23" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor={p.c1} stopOpacity="0.4" />
+            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.95" />
+            <stop offset="100%" stopColor={p.c1} stopOpacity="0.4" />
           </linearGradient>
         </defs>
-        <clipPath id="heartMasterClip">
-          <path d="M60 102 C60 102 14 72 14 41 C14 23 28 14 42 14 C52 14 58 20 60 27 C62 20 68 14 78 14 C92 14 106 23 106 41 C106 72 60 102 60 102 Z" />
-        </clipPath>
-        <g clipPath="url(#heartMasterClip)">
-          <path d="M10 10 H60 V106 H10 Z" fill="url(#leftLobeGrad)" />
-          <path d="M60 10 H110 V106 H60 Z" fill="url(#rightLobeGrad)" />
-          <path d="M60 27 C59 48 34 55 24 76 C36 90 50 99 60 102 Z" fill="url(#leftInnerFold)" />
-          <path d="M60 27 C64 48 82 55 94 70 L60 95 Z" fill="url(#centerFoldGrad)" />
-          <path d="M47 93 C56 72 86 52 94 70 C84 86 60 102 60 102 Z" fill="url(#bottomRibbonGrad)" />
-        </g>
+
+        {/* --- PAVILION (LOWER V-FACETS) --- */}
+        {/* Outer Left Pavilion Triangle */}
+        <polygon points="14,39 26,39 50,87" fill={p.c5} opacity="0.95" />
+        {/* Mid-Left Pavilion Triangle */}
+        <polygon points="26,39 38,39 50,87" fill={p.c4} opacity="0.9" />
+        {/* Center-Left Pavilion Triangle */}
+        <polygon points="38,39 50,39 50,87" fill={`url(#facetGradL-${p.id})`} />
+
+        {/* Center-Right Pavilion Triangle */}
+        <polygon points="50,39 62,39 50,87" fill={`url(#facetGradCenter-${p.id})`} />
+        {/* Mid-Right Pavilion Triangle */}
+        <polygon points="62,39 74,39 50,87" fill={p.c3} opacity="0.85" />
+        {/* Outer Right Pavilion Triangle */}
+        <polygon points="74,39 86,39 50,87" fill={`url(#facetGradR-${p.id})`} />
+
+        {/* --- CROWN (UPPER TRAPEZOID FACETS) --- */}
+        {/* Far Left Crown Corner */}
+        <polygon points="14,39 30,23 38,39" fill={p.c4} opacity="0.85" />
+        {/* Center Inverted Crown Triangle (Table to Girdle) */}
+        <polygon points="38,23 62,23 50,39" fill={`url(#facetGradCenter-${p.id})`} opacity="0.95" />
+        {/* Left Crown Star/Kite */}
+        <polygon points="30,23 38,23 50,39 38,39" fill={p.c2} opacity="0.8" />
+        {/* Right Crown Star/Kite */}
+        <polygon points="62,23 70,23 62,39 50,39" fill={p.c1} opacity="0.85" />
+        {/* Far Right Crown Corner */}
+        <polygon points="86,39 70,23 62,39" fill={p.c3} opacity="0.85" />
+
+        {/* Table Top Surface Gradient */}
+        <polygon points="30,23 70,23 62,23 38,23" fill="url(#tableHighlight-p)" opacity="0.6" />
+
+        {/* Facet Outlines / Prismatic Wireframe */}
+        <path
+          d="
+            M30,23 L70,23 L86,39 L50,87 L14,39 Z
+            M14,39 L86,39
+            M30,23 L38,39 L50,87
+            M70,23 L62,39 L50,87
+            M38,23 L50,39 L50,87
+            M62,23 L50,39
+            M26,39 L50,87
+            M74,39 L50,87
+          "
+          stroke={p.strokeColor}
+          strokeWidth="1.15"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeOpacity="0.85"
+        />
+
+        {/* Neon Girdle & Top Rim Accents */}
+        <line x1="30" y1="23" x2="70" y2="23" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.9" />
+        <circle cx="50" cy="23" r="2.2" fill="#FFFFFF" />
+        <circle cx="50" cy="87" r="1.8" fill="#FFFFFF" />
       </svg>
     </div>
   );
@@ -799,25 +1003,6 @@ const PERSONA_RESULTS = {
   Enjoyment: { name: "Joy", iconName: "Joy", description: "Because enjoyment naturally promotes social interaction and resilience, there are no intentional actions required to enact change. Allow your intrinsic responses to naturally maintain the state, savor the shared pleasure, and engage deeply." }
 };
 
-const TABLE_BOOKS_HOTSPOTS = [
-  { id: 'tb-1', shortTitle: "Mating in Captivity", title: "Mating in Captivity: Unlocking Erotic Intelligence", author: "Esther Perel", year: "2006", notebook: "Relationships Notebook", summary: "Explores the paradox of domesticity and sexual desire, showing how emotional security and erotic passion often pull in opposite directions.", takeaway: "Maintain separateness and autonomy in long-term relationships to keep erotic desire alive." },
-  { id: 'tb-2', shortTitle: "Attached", title: "Attached: The New Science of Adult Attachment", author: "Amir Levine and Rachel Heller", year: "2010", notebook: "Relationships Notebook", summary: "Identifies secure, anxious, and avoidant attachment styles in adult romantic relationships and how they dictate communication.", takeaway: "Understand your attachment style and communicate emotional needs clearly rather than testing your partner." },
-  { id: 'tb-3', shortTitle: "Crucial Conversations", title: "Crucial Conversations: Tools for Talking When Stakes Are High", author: "Kerry Patterson et al.", year: "2002", notebook: "Relationships Notebook", summary: "Provides tactical tools for maintaining psychological safety and open dialogue during high-stakes emotional disagreements.", takeaway: "Keep the dialogue safe and focus on mutual purpose when opinions differ and emotions run high." },
-  { id: 'tb-4', shortTitle: "Getting the Love You Want", title: "Getting the Love You Want: A Guide for Couples", author: "Harville Hendrix", year: "1988", notebook: "Relationships Notebook", summary: "Examines how unconscious childhood wounds (Imago) surface in romantic power struggles and how to heal through intentional dialogue.", takeaway: "Transform conflict into an opportunity for mutual childhood healing and conscious connection." },
-  { id: 'tb-5', shortTitle: "Hold Me Tight", title: "Hold Me Tight: Seven Conversations for a Lifetime of Love", author: "Sue Johnson", year: "2008", notebook: "Relationships Notebook", summary: "Groundbreaking Emotionally Focused Therapy (EFT) guide teaching couples how to slow down negative cycles and reveal vulnerable primary emotions.", takeaway: "Uncover primary emotions like fear and sadness beneath anger to build a secure emotional haven." },
-  { id: 'tb-6', shortTitle: "Men Are from Mars", title: "Men Are from Mars, Women Are from Venus", author: "John Gray", year: "1992", notebook: "Romance Notebooks", summary: "Explores how men and women process stress, communication, and emotional needs differently (e.g., men retreating to caves vs women talking).", takeaway: "Respect gender differences in stress processing without trying to change your partner." },
-  { id: 'tb-7', shortTitle: "Nonviolent Communication", title: "Nonviolent Communication: A Language of Life", author: "Marshall B. Rosenberg", year: "2003", notebook: "Relationships Notebook", summary: "Teaches a compassionate framework for expressing feelings and needs clearly without blame, criticism, or judgment.", takeaway: "Observe objective actions, name feelings, state underlying needs, and make positive requests." },
-  { id: 'tb-8', shortTitle: "The 5 Love Languages", title: "The 5 Love Languages: The Secret to Love That Lasts", author: "Gary Chapman", year: "1992", notebook: "Relationships Notebook", summary: "Identifies five primary ways people express and receive affection.", takeaway: "Intentionally speak your partner's primary love language to keep their emotional love tank full." },
-  { id: 'tb-9', shortTitle: "The Art of Loving", title: "The Art of Loving", author: "Erich Fromm", year: "1956", notebook: "Relationships Notebook", summary: "Philosophical exploration framing love not as a fleeting feeling of falling, but as an active art requiring discipline.", takeaway: "True love is an active giving and nurturing of another's life rather than passive consumption." },
-  { id: 'tb-10', shortTitle: "Atomic Attraction", title: "Atomic Attraction", author: "Christopher Canwell", year: "2017", notebook: "Romance (Male Perspective)", summary: "Breakdown of the scientific and evolutionary laws governing romantic attraction, desire, and polarity.", takeaway: "Attraction is governed by natural laws of polarity, mystery, and emotional stability." },
-  { id: 'tb-11', shortTitle: "How to Be a 3% Man", title: "How to Be a 3% Man", author: "Corey Wayne", year: "2013", notebook: "Romance (Male Perspective)", summary: "Dating and relationship guide focusing on emotional centeredness, masculine leadership, and listening to women's feelings.", takeaway: "Lead with confidence, stay centered during emotional tests, and never act out of neediness." },
-  { id: 'tb-12', shortTitle: "The Mystery Method", title: "The Mystery Method", author: "Mystery and Chris Odom", year: "2007", notebook: "Romance (Male Perspective)", summary: "Examines the evolutionary stages of human courtship, attraction phases, and social proof dynamics.", takeaway: "Understand courtship pacing and emotional framing during early social interactions." },
-  { id: 'tb-13', shortTitle: "The Rational Male", title: "The Rational Male", author: "Rollo Tomassi", year: "2013", notebook: "Romance (Male Perspective)", summary: "Interrogates intersexual dynamics from an evolutionary psychology and red-pill perspective.", takeaway: "Maintain your personal mission, avoid pedestalizing, and never sacrifice your self-respect." },
-  { id: 'tb-14', shortTitle: "The Game", title: "The Game: Penetrating the Secret Society of Pickup Artists", author: "Neil Strauss", year: "2005", notebook: "Romance (Male Perspective)", summary: "Memoir exploring the subterranean world of pickup artistry and the ultimate realization that inner game matters most.", takeaway: "True social confidence cannot be faked; it stems from self-acceptance and grounded character." },
-  { id: 'tb-15', shortTitle: "The Case for Settling", title: "The Case for Settling for Mr. Good Enough", author: "Lori Gottlieb", year: "2010", notebook: "Romance (Female Perspective)", summary: "Challenges the relentless modern pursuit of a cinematic high-chemistry soulmate at the expense of long-term compatibility.", takeaway: "Prioritize character, kindness, and shared goals over fleeting chemistry sparks." },
-  { id: 'tb-16', shortTitle: "The Way of the Superior Man", title: "The Way of the Superior Man", author: "David Deida", year: "1997", notebook: "Romance (Male Perspective)", summary: "Spiritual guide for men on living a life of purpose while embracing feminine-masculine polarity in relationships.", takeaway: "Prioritize your highest life purpose above the relationship to maintain the polarity that fuels desire." }
-];
-
 const THREE_EMOTION_DECK_CONFIGS = [
   { deckId: 'deck-basic', deckNumber: 'Deck I', partKey: 'Part I: Basic Emotions', badgeLabel: 'Part I', title: 'Part I: Basic Emotions', subtitle: '8 Foundational Evolutionary & Physiological Emotional States (#01 – #08)', cardRange: '#01 – #08 (8 Cards)', themeName: 'Faceted Ruby Crimson & Magenta', gradFrom: '#E3182D', gradTo: '#FF176B', glowColor: 'rgba(227, 24, 45, 0.22)', pillBg: 'bg-rose-500/15 text-rose-400 border-rose-500/30', activeGrad: 'from-[#E3182D] to-[#FF176B]' },
   { deckId: 'deck-combinatorial', deckNumber: 'Deck II', partKey: 'Part II: Combinatorial Emotions', badgeLabel: 'Part II', title: 'Part II: Combinatorial Emotions', subtitle: '8 Relational & Dyadic Blends Shaping Attraction, Polarity & Conflict (#09 – #16)', cardRange: '#09 – #16 (8 Cards)', themeName: 'Electric Indigo & Cobalt Sapphire', gradFrom: '#5A28FF', gradTo: '#1B75FF', glowColor: 'rgba(90, 40, 255, 0.24)', pillBg: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30', activeGrad: 'from-[#5A28FF] to-[#1B75FF]' },
@@ -960,22 +1145,24 @@ function TierCommemorativeGraphic({ score, tier, timestamp, darkMode, sourceLabe
 export default function App() {
   const [activeTab, setActiveTab] = useState('sanctuary');
   const [darkMode, setDarkMode] = useState(true);
-
-  // Synchronize Safari top bar color with darkMode state
-  useEffect(() => {
-    const themeColor = darkMode ? '#08071E' : '#F6F5F0';
-    let metaTag = document.querySelector('meta[name="theme-color"]');
-
-    if (!metaTag) {
-      metaTag = document.createElement('meta');
-      metaTag.setAttribute('name', 'theme-color');
-      document.head.appendChild(metaTag);
-    }
-
-    metaTag.setAttribute('content', themeColor);
-  }, [darkMode]);
-
+  const [rubyColorIndex, setRubyColorIndex] = useState(0); // Top-left Magenta default
   const [selectedTableBook, setSelectedTableBook] = useState(null);
+
+  // "For You" is locked to white/light mode; Relationships respects the user's "amor fati" toggle
+  const isRelationshipActive = activeTab !== 'sanctuary';
+  const isDark = isRelationshipActive && darkMode;
+
+  // Cycle to a random different color among the 9 gemstone palettes
+  const cycleRandomRubyColor = (e) => {
+    if (e) e.stopPropagation();
+    setRubyColorIndex(prev => {
+      let next = Math.floor(Math.random() * RUBY_GEM_PALETTES.length);
+      while (next === prev && RUBY_GEM_PALETTES.length > 1) {
+        next = Math.floor(Math.random() * RUBY_GEM_PALETTES.length);
+      }
+      return next;
+    });
+  };
 
   // Weekly Check-In State
   const [checkInAnswers, setCheckInAnswers] = useState(() => {
@@ -1030,7 +1217,19 @@ export default function App() {
   const [personaCompleted, setPersonaCompleted] = useState(false);
   const [personaStep, setPersonaStep] = useState(0);
 
-  // Generate random teaser content on every page refresh
+  // Safari Header Theme Sync
+  useEffect(() => {
+    const themeColor = isDark ? '#08071E' : '#F6F5F0';
+    let metaTag = document.querySelector('meta[name="theme-color"]');
+    if (!metaTag) {
+      metaTag = document.createElement('meta');
+      metaTag.setAttribute('name', 'theme-color');
+      document.head.appendChild(metaTag);
+    }
+    metaTag.setAttribute('content', themeColor);
+  }, [isDark]);
+
+  // Generate random teaser content on every page refresh for the Dashboard
   const randomTeasers = useMemo(() => {
     const quote = CURATED_QUOTES[Math.floor(Math.random() * CURATED_QUOTES.length)];
     const advice = TOP_20_ADVICE[Math.floor(Math.random() * TOP_20_ADVICE.length)];
@@ -1287,108 +1486,150 @@ export default function App() {
     setPersonaAnswers({}); setPersonaCompleted(false); setPersonaStep(0);
   };
 
-  const navGroups = [
-    {
-      label: 'Home',
-      icon: Sparkles,
-      items: [
-        { id: 'sanctuary', label: 'For You', icon: Sparkles, description: 'Return to your home sanctuary dashboard' }
-      ]
-    },
-    {
-      label: 'Assessments',
-      icon: Activity,
-      items: [
-        { id: 'checkin', label: 'Weekly Check-In', icon: CheckCircle2, description: 'Rate your partnership harmony' },
-        { id: 'quiz', label: 'Behaviour Quiz', icon: Activity, description: 'Diagnose relationship dynamics' },
-        { id: 'persona', label: 'Emotional Persona', icon: UserCircle, description: 'Discover your archetype' }
-      ]
-    },
-    {
-      label: 'Library & Wisdom',
-      icon: BookOpen,
-      items: [
-        { id: 'quotes', label: 'Quotes & Library', icon: BookOpen, description: 'Search curated relationship texts' },
-        { id: 'fivews', label: 'Advice', icon: Compass, description: 'Explore male & female perspectives' },
-        { id: 'lexicon', label: 'Lexicon of Love', icon: Waves, description: 'Discover untranslatable words' }
-      ]
-    },
-    {
-      label: 'Interactive Tools',
-      icon: Gem,
-      items: [
-        { id: 'emotions', label: 'Emotion Atlas', icon: Layers, description: 'Explore 22 relational emotions' },
-        { id: 'flags', label: 'Rubies', icon: Gem, description: 'Swipe green & black behavioural rubies' }
-      ]
-    }
+  // Complete List of All 8 Relationship Modules
+  const relationshipModules = [
+    { id: 'checkin', label: 'Weekly Check-In', icon: CheckCircle2, description: '20-point partnership harmony scoring' },
+    { id: 'quotes', label: 'Quotes & Library', icon: BookOpen, description: 'Curated wisdom & search across 30 books' },
+    { id: 'fivews', label: 'Advice', icon: Compass, description: '5 W\'s perspective compass & Dos and Don\'ts' },
+    { id: 'quiz', label: 'Behaviour Quiz', icon: Activity, description: 'Relationship diagnostic & book prescriptions' },
+    { id: 'flags', label: 'Rubies', icon: Gem, description: 'Swipe 28 Black & Green behavioral rubies' },
+    { id: 'emotions', label: 'Emotion Atlas', icon: Layers, description: '22 relational emotions fanned in 3 decks' },
+    { id: 'lexicon', label: 'Lexicon of Love', icon: Waves, description: '120 global & untranslatable love terms' },
+    { id: 'persona', label: 'Emotional Persona', icon: UserCircle, description: 'Discover your crystalline emotional archetype' }
   ];
 
-  const themeSurface = darkMode ? 'bg-[#130F26]/90 border-indigo-500/25 text-stone-100 shadow-lg shadow-black/25' : 'bg-[#FFFFFF]/95 border-stone-200/90 text-slate-900 shadow-sm';
-  const themeSubtleCard = darkMode ? 'bg-[#1A1536]/80 border-indigo-400/20 text-stone-200' : 'bg-[#F8F6F2] border-stone-200/80 text-slate-800';
-  const themeMutedText = darkMode ? 'text-indigo-200/70' : 'text-slate-500';
+  const themeSurface = isDark ? 'bg-[#130F26]/90 border-indigo-500/25 text-stone-100 shadow-lg shadow-black/25' : 'bg-[#FFFFFF]/95 border-stone-200/90 text-slate-900 shadow-sm';
+  const themeSubtleCard = isDark ? 'bg-[#1A1536]/80 border-indigo-400/20 text-stone-200' : 'bg-[#F8F6F2] border-stone-200/80 text-slate-800';
+  const themeMutedText = isDark ? 'text-indigo-200/70' : 'text-slate-500';
+
+  const currentRelationshipModule = relationshipModules.find(m => m.id === activeTab);
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-500 flex flex-col selection:bg-pink-500 selection:text-white ${darkMode ? 'bg-[#0A0818] text-stone-100' : 'bg-[#F8F6F2] text-[#141229]'}`}>
+    <div className={`min-h-screen font-sans transition-colors duration-500 flex flex-col selection:bg-pink-500 selection:text-white ${isDark ? 'bg-[#0A0818] text-stone-100' : 'bg-[#F8F6F2] text-[#141229]'}`}>
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className={`absolute -top-32 -left-28 w-[30rem] h-[30rem] rounded-full blur-3xl transition-opacity duration-700 ${darkMode ? 'bg-[#5A28FF]/20' : 'bg-[#6E3AFF]/12'}`} />
-        <div className={`absolute top-1/4 -right-32 w-[32rem] h-[32rem] rounded-full blur-3xl transition-opacity duration-700 ${darkMode ? 'bg-[#FF176B]/18' : 'bg-[#FF9E6D]/20'}`} />
-        <div className={`absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl transition-opacity duration-700 ${darkMode ? 'bg-[#1B75FF]/16' : 'bg-[#FF176B]/12'}`} />
+        <div className={`absolute -top-32 -left-28 w-[30rem] h-[30rem] rounded-full blur-3xl transition-opacity duration-700 ${isDark ? 'bg-[#5A28FF]/20' : 'bg-[#6E3AFF]/12'}`} />
+        <div className={`absolute top-1/4 -right-32 w-[32rem] h-[32rem] rounded-full blur-3xl transition-opacity duration-700 ${isDark ? 'bg-[#FF176B]/18' : 'bg-[#FF9E6D]/20'}`} />
+        <div className={`absolute -bottom-32 left-1/3 w-[28rem] h-[28rem] rounded-full blur-3xl transition-opacity duration-700 ${isDark ? 'bg-[#1B75FF]/16' : 'bg-[#FF176B]/12'}`} />
       </div>
 
-      <header className={`sticky top-0 z-30 backdrop-blur-xl border-b transition-colors duration-500 ${darkMode ? 'bg-[#08071E]/85 border-indigo-500/20' : 'bg-[#F6F5F0]/85 border-stone-200/90'}`}>
+      <header className={`sticky top-0 z-30 backdrop-blur-xl border-b transition-colors duration-500 ${isDark ? 'bg-[#08071E]/85 border-indigo-500/20' : 'bg-[#F6F5F0]/85 border-stone-200/90'}`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
-          <div onClick={() => setActiveTab('sanctuary')} className="flex items-center gap-3.5 cursor-pointer group">
-            <RubyGradientLogo darkMode={darkMode} size={44} className="group-hover:scale-105 transition-transform" />
-            <div>
-              <h1 className="text-xl font-serif font-bold tracking-tight bg-gradient-to-r from-[#6E3AFF] via-[#FF176B] to-[#FF9E6D] bg-clip-text text-transparent">Ruby Home</h1>
+          <div className="flex items-center gap-3.5 select-none">
+            <FacetedRubyLogo
+              colorIndex={rubyColorIndex}
+              darkMode={isDark}
+              size={46}
+              onClick={cycleRandomRubyColor}
+            />
+            <div onClick={() => setActiveTab('sanctuary')} className="cursor-pointer group">
+              <h1 className="text-xl font-serif font-bold tracking-tight bg-gradient-to-r from-[#6E3AFF] via-[#FF176B] to-[#FF9E6D] bg-clip-text text-transparent group-hover:brightness-110 transition-all">Ruby Home</h1>
             </div>
           </div>
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <button onClick={() => setDarkMode(!darkMode)} title="Toggle Light Mode and Dark Mode" className={`group relative overflow-hidden px-4 py-2 rounded-full text-xs sm:text-sm font-serif italic font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 border shadow-md ${darkMode ? 'bg-gradient-to-r from-[#4618F2] via-[#D81B9E] to-[#FF7B54] text-white border-pink-400/40 shadow-pink-950/50 hover:brightness-110' : 'bg-gradient-to-r from-[#141229] via-[#3B10E6] to-[#D81B9E] text-white border-indigo-300 shadow-indigo-200 hover:brightness-110'}`}>
-              {darkMode ? <Sun className="w-4 h-4 text-amber-200 transition-transform group-hover:rotate-45" /> : <Moon className="w-4 h-4 text-indigo-200 transition-transform group-hover:-rotate-12" />}
-              <span>amor fati</span>
-            </button>
+            {isRelationshipActive && (
+              <button onClick={() => setDarkMode(!darkMode)} title="Toggle Light Mode and Dark Mode" className={`group relative overflow-hidden px-4 py-2 rounded-full text-xs sm:text-sm font-serif italic font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 border shadow-md ${isDark ? 'bg-gradient-to-r from-[#4618F2] via-[#D81B9E] to-[#FF7B54] text-white border-pink-400/40 shadow-pink-950/50 hover:brightness-110' : 'bg-gradient-to-r from-[#141229] via-[#3B10E6] to-[#D81B9E] text-white border-indigo-300 shadow-indigo-200 hover:brightness-110'}`}>
+                {isDark ? <Sun className="w-4 h-4 text-amber-200 transition-transform group-hover:rotate-45" /> : <Moon className="w-4 h-4 text-indigo-200 transition-transform group-hover:-rotate-12" />}
+                <span>amor fati</span>
+              </button>
+            )}
           </div>
         </div>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2">
-          <nav className="flex flex-wrap items-center gap-2 sm:gap-4">
-            {navGroups.map(group => {
-              const GroupIcon = group.icon;
-              const isActiveGroup = group.items.some(i => i.id === activeTab);
-              
-              return (
-                <div key={group.label} className="relative group">
-                  <button className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${isActiveGroup ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF6B6B] text-white shadow-md' : darkMode ? 'text-indigo-200/80 hover:bg-indigo-950/70 hover:text-white' : 'text-slate-600 hover:bg-stone-200/70 hover:text-slate-900'}`}>
-                    <GroupIcon className={`w-4 h-4 ${isActiveGroup ? 'text-amber-200' : 'text-pink-500'}`} /> {group.label}
-                  </button>
-                  
-                  {/* Dropdown Menu Block */}
-                  <div className="absolute left-0 top-full pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
-                    <div className={`w-64 rounded-2xl border shadow-xl p-2 flex flex-col gap-1 ${darkMode ? 'bg-[#130F26]/95 border-indigo-500/20 backdrop-blur-xl' : 'bg-white border-stone-200 backdrop-blur-xl shadow-stone-200/50'}`}>
-                      {group.items.map(item => {
-                        const ItemIcon = item.icon;
-                        const isItemActive = activeTab === item.id;
-                        return (
-                          <button 
-                            key={item.id} 
-                            onClick={() => setActiveTab(item.id)} 
-                            className={`w-full text-left flex items-start gap-3 p-3 rounded-xl transition-all ${isItemActive ? (darkMode ? 'bg-indigo-500/20 text-white' : 'bg-pink-50 text-slate-900') : (darkMode ? 'hover:bg-indigo-500/10 text-indigo-100/80 hover:text-white' : 'hover:bg-stone-100 text-slate-600 hover:text-slate-900')}`}
-                          >
-                            <div className={`mt-0.5 shrink-0 rounded-lg p-1.5 ${isItemActive ? 'bg-gradient-to-br from-[#5A28FF] to-[#FF176B] text-white shadow-sm' : (darkMode ? 'bg-indigo-950/50 text-pink-400' : 'bg-stone-100 text-pink-500')}`}>
-                               <ItemIcon className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm">{item.label}</div>
-                              <div className={`text-[10px] leading-snug mt-0.5 ${darkMode ? 'text-indigo-300/60' : 'text-slate-500'}`}>{item.description}</div>
-                            </div>
-                          </button>
-                        );
-                      })}
+        
+        {/* Streamlined Top Navigation: 'For You' + 'Relationships' Mega-Dropdown */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2.5">
+          <nav className="flex items-center gap-2.5">
+            {/* Direct Home Link */}
+            <button
+              onClick={() => setActiveTab('sanctuary')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+                activeTab === 'sanctuary'
+                  ? 'bg-gradient-to-r from-[#5A28FF] to-[#FF176B] text-white shadow-md'
+                  : isDark
+                  ? 'text-indigo-200/80 hover:bg-white/5 hover:text-white'
+                  : 'text-slate-600 hover:bg-stone-200/70 hover:text-slate-900'
+              }`}
+            >
+              <Sparkles className={`w-4 h-4 ${activeTab === 'sanctuary' ? 'text-amber-200' : 'text-pink-500'}`} />
+              <span>For You</span>
+            </button>
+
+            {/* Single Consolidated 'Relationships' Heading with Dropdown */}
+            <div className="relative group">
+              <button
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+                  isRelationshipActive
+                    ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF6B6B] text-white shadow-md'
+                    : isDark
+                    ? 'text-indigo-200/80 hover:bg-white/5 hover:text-white'
+                    : 'text-slate-600 hover:bg-stone-200/70 hover:text-slate-900'
+                }`}
+              >
+                <Heart className={`w-4 h-4 ${isRelationshipActive ? 'text-amber-200 fill-amber-200' : 'text-pink-500'}`} />
+                <span>Relationships</span>
+                {isRelationshipActive && currentRelationshipModule && (
+                  <span className="hidden sm:inline-block text-[11px] opacity-90 px-2 py-0.5 rounded-full bg-black/20 font-normal">
+                    • {currentRelationshipModule.label}
+                  </span>
+                )}
+                <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:rotate-90 opacity-75" />
+              </button>
+
+              {/* Large Dropdown Menu Containing All 8 Subsections */}
+              <div className="absolute left-0 top-full pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                <div className={`w-[21rem] sm:w-[36rem] rounded-3xl border shadow-2xl p-3 backdrop-blur-2xl transition-all ${
+                  isDark ? 'bg-[#130F26]/95 border-indigo-500/30 text-stone-100 shadow-black/80' : 'bg-white/95 border-stone-200 text-slate-900 shadow-stone-300/60'
+                }`}>
+                  <div className="flex items-center justify-between px-3 py-2 mb-1 border-b border-indigo-500/15">
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-pink-500">
+                      <Heart className="w-3.5 h-3.5 fill-pink-500 text-pink-500" />
+                      <span>Relationships Hub</span>
                     </div>
+                    <span className={`text-[11px] ${themeMutedText}`}>8 Core Modules</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                    {relationshipModules.map(module => {
+                      const IconComponent = module.icon;
+                      const isActive = activeTab === module.id;
+                      return (
+                        <button
+                          key={module.id}
+                          onClick={() => setActiveTab(module.id)}
+                          className={`w-full text-left flex items-start gap-3 p-2.5 rounded-2xl transition-all ${
+                            isActive
+                              ? isDark
+                                ? 'bg-indigo-500/25 border border-pink-400/40 text-white'
+                                : 'bg-pink-50 border border-pink-300 text-slate-900'
+                              : isDark
+                              ? 'hover:bg-white/5 border border-transparent text-indigo-100/80 hover:text-white'
+                              : 'hover:bg-stone-100 border border-transparent text-slate-700 hover:text-slate-900'
+                          }`}
+                        >
+                          <div className={`mt-0.5 shrink-0 rounded-xl p-2 ${
+                            isActive
+                              ? 'bg-gradient-to-br from-[#5A28FF] to-[#FF176B] text-white shadow-md'
+                              : isDark
+                              ? 'bg-[#1D1740] text-pink-400'
+                              : 'bg-stone-100 text-pink-500'
+                          }`}>
+                            <IconComponent className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="font-semibold text-xs sm:text-sm flex items-center justify-between">
+                              <span>{module.label}</span>
+                              {isActive && <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />}
+                            </div>
+                            <div className={`text-[11px] leading-snug mt-0.5 line-clamp-1 ${isDark ? 'text-indigo-200/60' : 'text-slate-500'}`}>
+                              {module.description}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            </div>
           </nav>
         </div>
       </header>
@@ -1396,10 +1637,8 @@ export default function App() {
       <main className="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
         {activeTab === 'sanctuary' && (
           <div className="space-y-8 animate-fadeIn">
-            
-            {/* NEW: Dashboard Navigation Grid */}
+            {/* Dashboard Navigation Grid with Dynamic Teasers */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              
               {/* Full Width / Prominent Weekly Check-in */}
               <div onClick={() => setActiveTab('checkin')} className={`cursor-pointer col-span-1 md:col-span-2 lg:col-span-4 rounded-3xl p-6 border transition-all hover:-translate-y-1 hover:border-pink-500 hover:shadow-xl hover:shadow-pink-500/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 ${themeSurface}`}>
                  <div className="flex items-center gap-4">
@@ -1416,7 +1655,7 @@ export default function App() {
               <div onClick={() => setActiveTab('quotes')} className={`group cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 hover:border-amber-400 hover:shadow-lg ${themeSurface} flex flex-col justify-between h-full`}>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between"><BookOpen className="w-5 h-5 text-amber-500" /><span className="text-[10px] uppercase font-bold text-amber-500 tracking-wider">Quotes & Library</span></div>
-                  <p className={`text-sm font-serif italic leading-relaxed line-clamp-4 ${darkMode ? 'text-amber-100/90' : 'text-slate-700'}`}>"{randomTeasers.quote.quote}"</p>
+                  <p className={`text-sm font-serif italic leading-relaxed line-clamp-4 ${isDark ? 'text-amber-100/90' : 'text-slate-700'}`}>"{randomTeasers.quote.quote}"</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-indigo-500/10 text-xs font-semibold text-amber-500 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Explore Library <ArrowRight className="w-3.5 h-3.5" /></div>
               </div>
@@ -1482,7 +1721,8 @@ export default function App() {
               </div>
             </div>
 
-            <div className={`rounded-[2.25rem] border p-6 sm:p-9 shadow-xl transition-all duration-500 mt-4 ${darkMode ? 'bg-[#130F26] border-indigo-500/30' : 'bg-white border-stone-200'}`}>
+            {/* Discover Insights 30-Book Grid */}
+            <div className={`rounded-[2.25rem] border p-6 sm:p-9 shadow-xl transition-all duration-500 mt-4 ${isDark ? 'bg-[#130F26] border-indigo-500/30' : 'bg-white border-stone-200'}`}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-indigo-500/15">
                 <div>
                   <div className="flex items-center gap-2">
@@ -1501,7 +1741,7 @@ export default function App() {
                       key={idx} 
                       onClick={() => setSelectedTableBook(book)} 
                       className={`group relative text-center aspect-[2/3] rounded-2xl p-4 border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-xl ${
-                        darkMode 
+                        isDark 
                           ? 'bg-[#14102C]/60 border-indigo-500/25 hover:border-pink-500/50 text-stone-100' 
                           : 'bg-white border-stone-200 hover:border-pink-400 text-slate-900'
                       }`}
@@ -1511,7 +1751,7 @@ export default function App() {
                       <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full pt-2">
                         <IconComponent 
                           className={`w-12 h-12 transition-all duration-500 ${
-                            darkMode 
+                            isDark 
                               ? 'text-indigo-400/30 group-hover:text-pink-400 group-hover:drop-shadow-[0_0_15px_rgba(244,114,182,0.8)]' 
                               : 'text-slate-300 group-hover:text-pink-500 group-hover:drop-shadow-[0_0_12px_rgba(236,72,153,0.6)]'
                           }`} 
@@ -1520,10 +1760,10 @@ export default function App() {
                       </div>
                       
                       <div className="relative z-10 space-y-1.5 mt-4">
-                        <h4 className={`font-serif font-bold text-xs sm:text-sm leading-snug line-clamp-3 ${darkMode ? 'text-stone-200' : 'text-slate-800'}`}>
+                        <h4 className={`font-serif font-bold text-xs sm:text-sm leading-snug line-clamp-3 ${isDark ? 'text-stone-200' : 'text-slate-800'}`}>
                           {book.title}
                         </h4>
-                        <p className={`text-[9px] uppercase tracking-wider font-semibold ${darkMode ? 'text-indigo-300/60' : 'text-slate-500'}`}>
+                        <p className={`text-[9px] uppercase tracking-wider font-semibold ${isDark ? 'text-indigo-300/60' : 'text-slate-500'}`}>
                           {book.author}
                         </p>
                       </div>
@@ -1533,18 +1773,18 @@ export default function App() {
               </div>
             </div>
 
+            {/* Streamlined Book Insight Modal (No duplicate summary box) */}
             {selectedTableBook && (
               <div onClick={() => setSelectedTableBook(null)} className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-                <div onClick={e => e.stopPropagation()} className={`relative w-full max-w-lg rounded-3xl p-6 sm:p-8 border shadow-2xl transition-all ${darkMode ? 'bg-[#1A1245] border-indigo-500/40 text-stone-100' : 'bg-white border-stone-200 text-slate-900'}`}>
+                <div onClick={e => e.stopPropagation()} className={`relative w-full max-w-lg rounded-3xl p-6 sm:p-8 border shadow-2xl transition-all ${isDark ? 'bg-[#1A1245] border-indigo-500/40 text-stone-100' : 'bg-white border-stone-200 text-slate-900'}`}>
                   <button onClick={() => setSelectedTableBook(null)} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/10 transition"><X className="w-5 h-5" /></button>
                   <div className="space-y-4">
                     <span className="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-pink-500/15 text-pink-400">{selectedTableBook.notebook}</span>
                     <h3 className="text-2xl sm:text-3xl font-serif font-bold leading-snug">{selectedTableBook.title} ({selectedTableBook.year})</h3>
                     <p className={`text-sm font-medium ${themeMutedText}`}>By {selectedTableBook.author}</p>
-                    <div className={`p-4 rounded-2xl border text-sm leading-relaxed ${themeSubtleCard}`}>{selectedTableBook.summary}</div>
-                    <div className="pt-4 border-t border-indigo-500/15">
-                      <p className="text-sm font-semibold text-amber-500">Core Insight:</p>
-                      <p className={`text-sm leading-relaxed mt-1 ${themeMutedText}`}>{selectedTableBook.takeaway}</p>
+                    <div className={`p-5 rounded-2xl border space-y-1.5 ${themeSubtleCard}`}>
+                      <p className="text-xs font-bold uppercase tracking-wider text-amber-500">Core Insight</p>
+                      <p className="text-sm leading-relaxed font-medium">{selectedTableBook.takeaway}</p>
                     </div>
                   </div>
                 </div>
@@ -1563,20 +1803,20 @@ export default function App() {
               </div>
               <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                 <button onClick={handleDemoFillCheckInHigh} className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 hover:brightness-110 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm"><Gem className="w-3.5 h-3.5" /> Demo High Score (82%)</button>
-                <button onClick={handleDemoFillCheckInGrowth} className={`px-4 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5 border ${darkMode ? 'bg-indigo-950/90 text-amber-300 border-amber-400/30 hover:bg-indigo-900' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'}`}><BookOpen className="w-3.5 h-3.5" /> Demo Growth Score (58%)</button>
-                <button onClick={handleResetCheckIn} className={`px-3.5 py-2 rounded-full text-xs font-medium transition flex items-center gap-1.5 border ${darkMode ? 'bg-white/5 text-stone-300 border-white/10 hover:bg-white/10' : 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200'}`}><RotateCcw className="w-3.5 h-3.5" /> Reset</button>
+                <button onClick={handleDemoFillCheckInGrowth} className={`px-4 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5 border ${isDark ? 'bg-indigo-950/90 text-amber-300 border-amber-400/30 hover:bg-indigo-900' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'}`}><BookOpen className="w-3.5 h-3.5" /> Demo Growth Score (58%)</button>
+                <button onClick={handleResetCheckIn} className={`px-3.5 py-2 rounded-full text-xs font-medium transition flex items-center gap-1.5 border ${isDark ? 'bg-white/5 text-stone-300 border-white/10 hover:bg-white/10' : 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200'}`}><RotateCcw className="w-3.5 h-3.5" /> Reset</button>
               </div>
             </div>
 
             <div className={`rounded-2xl p-4 border flex flex-col sm:flex-row items-center justify-between gap-4 ${themeSurface}`}>
               <div className="w-full sm:w-2/3 space-y-1.5">
                 <div className={`flex justify-between text-xs font-medium ${themeMutedText}`}><span>Reflection Progress: {answeredCount} of 20 Questions Answered</span><span>{Math.round((answeredCount / 20) * 100)}%</span></div>
-                <div className={`w-full h-2.5 rounded-full overflow-hidden ${darkMode ? 'bg-indigo-950' : 'bg-stone-200'}`}>
+                <div className={`w-full h-2.5 rounded-full overflow-hidden ${isDark ? 'bg-indigo-950' : 'bg-stone-200'}`}>
                   <div className="h-full bg-gradient-to-r from-[#5A28FF] via-[#FF176B] to-[#FF9E6D] transition-all duration-500" style={{ width: `${(answeredCount / 20) * 100}%` }} />
                 </div>
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <button onClick={() => setCheckInSubmitted(false)} className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${!checkInSubmitted ? 'bg-gradient-to-r from-[#5A28FF] to-[#D81B9E] text-white' : darkMode ? 'bg-white/5 text-stone-300 hover:bg-white/10' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}>Questions ({answeredCount}/20)</button>
+                <button onClick={() => setCheckInSubmitted(false)} className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${!checkInSubmitted ? 'bg-gradient-to-r from-[#5A28FF] to-[#D81B9E] text-white' : isDark ? 'bg-white/5 text-stone-300 hover:bg-white/10' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}>Questions ({answeredCount}/20)</button>
                 <button onClick={() => { setCheckInGradeTimestamp(new Date()); setCheckInSubmitted(true); }} disabled={answeredCount === 0} className={`px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 ${checkInSubmitted ? 'bg-gradient-to-r from-rose-600 to-orange-500 text-white shadow-sm' : answeredCount > 0 ? 'bg-pink-500/20 text-pink-400 border border-pink-500/30 hover:bg-pink-500/30' : 'opacity-40 cursor-not-allowed bg-stone-500/10'}`}>Grade & View Analysis <ArrowRight className="w-3.5 h-3.5" /></button>
               </div>
             </div>
@@ -1586,7 +1826,7 @@ export default function App() {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     {[0, 1, 2, 3].map(stepIdx => (
-                      <button key={stepIdx} onClick={() => setCheckInStep(stepIdx)} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${checkInStep === stepIdx ? 'bg-gradient-to-r from-[#5A28FF] to-[#FF176B] text-white shadow-sm' : darkMode ? 'bg-[#14123B] text-indigo-200 border border-indigo-500/30' : 'bg-white text-slate-600 border border-stone-200'}`}>Questions {stepIdx * 5 + 1}–{stepIdx * 5 + 5}</button>
+                      <button key={stepIdx} onClick={() => setCheckInStep(stepIdx)} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${checkInStep === stepIdx ? 'bg-gradient-to-r from-[#5A28FF] to-[#FF176B] text-white shadow-sm' : isDark ? 'bg-[#14123B] text-indigo-200 border border-indigo-500/30' : 'bg-white text-slate-600 border border-stone-200'}`}>Questions {stepIdx * 5 + 1}–{stepIdx * 5 + 5}</button>
                     ))}
                   </div>
                   <span className={`text-xs ${themeMutedText}`}>1 = Needs Nurturing • 3 = Steady • 5 = Thriving</span>
@@ -1602,7 +1842,7 @@ export default function App() {
                           {[{ val: 1, label: '1 • Struggling' }, { val: 2, label: '2 • Needs Care' }, { val: 3, label: '3 • Balanced' }, { val: 4, label: '4 • Strong' }, { val: 5, label: '5 • Thriving' }].map(opt => {
                             const selected = currentRating === opt.val;
                             return (
-                              <button key={opt.val} onClick={() => handleRateQuestion(item.rank, opt.val)} className={`py-2.5 px-2 rounded-2xl text-xs font-semibold border transition-all flex flex-col items-center justify-center gap-1 ${selected ? opt.val >= 4 ? 'bg-gradient-to-r from-[#5A28FF] to-[#1B75FF] text-white border-indigo-400 shadow-md' : opt.val === 3 ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-300 shadow-md' : 'bg-gradient-to-r from-rose-600 to-pink-600 text-white border-rose-400 shadow-md' : darkMode ? 'bg-[#191645]/90 text-indigo-200 border-indigo-500/25 hover:bg-indigo-900/60' : 'bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100'}`}>
+                              <button key={opt.val} onClick={() => handleRateQuestion(item.rank, opt.val)} className={`py-2.5 px-2 rounded-2xl text-xs font-semibold border transition-all flex flex-col items-center justify-center gap-1 ${selected ? opt.val >= 4 ? 'bg-gradient-to-r from-[#5A28FF] to-[#1B75FF] text-white border-indigo-400 shadow-md' : opt.val === 3 ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-300 shadow-md' : 'bg-gradient-to-r from-rose-600 to-pink-600 text-white border-rose-400 shadow-md' : isDark ? 'bg-[#191645]/90 text-indigo-200 border-indigo-500/25 hover:bg-indigo-900/60' : 'bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100'}`}>
                                 <span className="text-sm font-bold">{opt.val}</span><span className="hidden sm:inline text-[11px] opacity-90">{opt.label.split('• ')[1]}</span>
                               </button>
                             );
@@ -1618,18 +1858,15 @@ export default function App() {
                 </div>
               </div>
             ) : (
-              /* Check-In Analysis Report View */
               checkInAnalysis && (
                 <div className="space-y-8 animate-fadeIn">
                   <TierCommemorativeGraphic
                     score={checkInAnalysis.percentage}
                     tier={checkInAnalysis.tier}
                     timestamp={checkInGradeTimestamp}
-                    darkMode={darkMode}
+                    darkMode={isDark}
                     sourceLabel="20-Question Weekly Spouse Harmony Check-In"
                   />
-
-                  {/* Two Column Breakdown: What is Going Great vs What Needs Improvement */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className={`rounded-3xl p-6 border space-y-4 ${themeSurface}`}>
                       <div className="flex items-center justify-between border-b border-indigo-500/15 pb-4">
@@ -1674,12 +1911,12 @@ export default function App() {
               </div>
               <div className="relative">
                 <Search className="w-5 h-5 text-pink-500 absolute left-4 top-1/2 -translate-y-1/2" />
-                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search for 'cave', 'Gottman', 'boundaries', 'attachment', 'contempt'..." className={`w-full pl-12 pr-24 py-3.5 rounded-2xl border text-sm focus:outline-none focus:border-pink-500 transition ${darkMode ? 'bg-[#0B0926] border-indigo-500/30 text-white placeholder-indigo-300/40' : 'bg-stone-50 border-stone-200 text-slate-900 placeholder-stone-400'}`} />
+                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search for 'cave', 'Gottman', 'boundaries', 'attachment', 'contempt'..." className={`w-full pl-12 pr-24 py-3.5 rounded-2xl border text-sm focus:outline-none focus:border-pink-500 transition ${isDark ? 'bg-[#0B0926] border-indigo-500/30 text-white placeholder-indigo-300/40' : 'bg-stone-50 border-stone-200 text-slate-900 placeholder-stone-400'}`} />
                 {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-xs px-2.5 py-1 rounded-full bg-pink-500/20 text-pink-400">Clear</button>}
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 {[{ id: 'all', label: `All Material (${allSearchableItems.length})` }, { id: 'quotes', label: `Quotes & Sentiments (${CURATED_QUOTES.length})` }, { id: 'principles', label: 'Top 20 Advice (20)' }, { id: 'emotions', label: '22 Emotions (22)' }, { id: 'male', label: 'Male Dos & Don\'ts (10)' }, { id: 'female', label: 'Female Dos & Don\'ts (10)' }, { id: 'mistakes', label: 'Common Mistakes (5)' }, { id: 'books', label: `30 Reference Books (${REFERENCE_BOOKS.length})` }].map(cat => (
-                  <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${selectedCategory === cat.id ? 'bg-gradient-to-r from-[#5A28FF] to-[#FF176B] text-white shadow-sm' : darkMode ? 'bg-white/5 text-indigo-200 hover:bg-white/10' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}>{cat.label}</button>
+                  <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${selectedCategory === cat.id ? 'bg-gradient-to-r from-[#5A28FF] to-[#FF176B] text-white shadow-sm' : isDark ? 'bg-white/5 text-indigo-200 hover:bg-white/10' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}>{cat.label}</button>
                 ))}
               </div>
             </div>
@@ -1806,7 +2043,7 @@ export default function App() {
                     score={quizResults.percentage}
                     tier={quizResults.tier}
                     timestamp={quizGradeTimestamp}
-                    darkMode={darkMode}
+                    darkMode={isDark}
                     sourceLabel="Recent Relationship Behaviour Diagnostic"
                   />
                   {quizResults.targetedAdvice.length > 0 && (
@@ -1885,7 +2122,7 @@ export default function App() {
               </div>
               <div className="lg:col-span-5 space-y-5">
                 {lastSwipeReveal ? (
-                  <div className={`rounded-3xl p-6 border-2 shadow-xl transition-all space-y-4 ${lastSwipeReveal.card.flagType === 'green' ? 'bg-emerald-500/15 border-emerald-400/50 text-emerald-300' : darkMode ? 'bg-slate-900/90 border-indigo-400/40 text-slate-200' : 'bg-slate-100 border-slate-300 text-slate-900'}`}>
+                  <div className={`rounded-3xl p-6 border-2 shadow-xl transition-all space-y-4 ${lastSwipeReveal.card.flagType === 'green' ? 'bg-emerald-500/15 border-emerald-400/50 text-emerald-300' : isDark ? 'bg-slate-900/90 border-indigo-400/40 text-slate-200' : 'bg-slate-100 border-slate-300 text-slate-900'}`}>
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
                         {lastSwipeReveal.card.flagType === 'green' ? (
@@ -1909,8 +2146,8 @@ export default function App() {
                         </div>
                       </div>
                     </div>
-                    <h4 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Official Trait: {lastSwipeReveal.card.trait} ({lastSwipeReveal.card.gender})</h4>
-                    <p className={`text-xs sm:text-sm leading-relaxed ${darkMode ? 'text-stone-200' : 'text-slate-700'}`}>"{lastSwipeReveal.card.description}"</p>
+                    <h4 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Official Trait: {lastSwipeReveal.card.trait} ({lastSwipeReveal.card.gender})</h4>
+                    <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-stone-200' : 'text-slate-700'}`}>"{lastSwipeReveal.card.description}"</p>
                   </div>
                 ) : (
                   <div className={`rounded-3xl p-6 border text-center space-y-3 ${themeSurface}`}>
@@ -1996,7 +2233,7 @@ export default function App() {
                 </div>
                 <div className="relative w-full lg:w-72 shrink-0">
                   <Search className="w-4 h-4 text-pink-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input type="text" value={emotionSearchQuery} onChange={e => setEmotionSearchQuery(e.target.value)} placeholder="Filter emotions..." className={`w-full pl-10 pr-16 py-2.5 rounded-2xl border text-xs sm:text-sm focus:outline-none focus:border-pink-500 transition ${darkMode ? 'bg-[#0A0818] border-indigo-500/30 text-white placeholder-indigo-300/40' : 'bg-[#F8F6F2] border-stone-200 text-slate-900 placeholder-stone-400'}`} />
+                  <input type="text" value={emotionSearchQuery} onChange={e => setEmotionSearchQuery(e.target.value)} placeholder="Filter emotions..." className={`w-full pl-10 pr-16 py-2.5 rounded-2xl border text-xs sm:text-sm focus:outline-none focus:border-pink-500 transition ${isDark ? 'bg-[#0A0818] border-indigo-500/30 text-white placeholder-indigo-300/40' : 'bg-[#F8F6F2] border-stone-200 text-slate-900 placeholder-stone-400'}`} />
                   {emotionSearchQuery && <button onClick={() => setEmotionSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-400 font-semibold">Clear</button>}
                 </div>
               </div>
@@ -2022,7 +2259,7 @@ export default function App() {
                   return em.name.toLowerCase().includes(q) || em.number.includes(q) || em.facialAndBody.toLowerCase().includes(q);
                 });
                 return (
-                  <section key={deckCfg.deckId} id={deckCfg.deckId} className={`relative rounded-[2.5rem] border overflow-hidden transition-all duration-500 p-6 sm:p-10 space-y-6 ${darkMode ? 'bg-gradient-to-b from-[#110D29] via-[#151036] to-[#0B091E] border-indigo-500/30 shadow-2xl' : 'bg-gradient-to-b from-[#FFFFFF] via-[#FAF8F5] to-[#F3EFEA] border-stone-200/95 shadow-xl'}`}>
+                  <section key={deckCfg.deckId} id={deckCfg.deckId} className={`relative rounded-[2.5rem] border overflow-hidden transition-all duration-500 p-6 sm:p-10 space-y-6 ${isDark ? 'bg-gradient-to-b from-[#110D29] via-[#151036] to-[#0B091E] border-indigo-500/30 shadow-2xl' : 'bg-gradient-to-b from-[#FFFFFF] via-[#FAF8F5] to-[#F3EFEA] border-stone-200/95 shadow-xl'}`}>
                     <div style={{ background: `radial-gradient(circle at 50% 60%, ${deckCfg.glowColor}, transparent 70%)` }} className="absolute inset-0 pointer-events-none" />
                     <div className="relative z-10 flex flex-col gap-4 border-b border-indigo-500/15 pb-5">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -2043,7 +2280,7 @@ export default function App() {
                           const scaleVal = isHovered || isSelected ? 1.13 : 1; const zIndexVal = isSelected ? 60 : isHovered ? 55 : index + 1;
                           return (
                             <button key={card.id} onClick={() => setSelectedEmotionId(card.id)} onMouseEnter={() => setHoveredEmotionId(card.id)} onMouseLeave={() => setHoveredEmotionId(null)} style={{ transform: `translateX(${translateX}px) translateY(${activeLiftY}px) rotate(${rotationAngle}deg) scale(${scaleVal})`, transformOrigin: '50% 125%', zIndex: zIndexVal }} className={`group/card absolute w-36 sm:w-44 h-56 sm:h-64 rounded-[1.5rem] p-[2px] transition-all duration-300 ease-out cursor-pointer select-none shadow-2xl ${isHovered || isSelected ? 'shadow-pink-500/45 ring-2 ring-white/50' : 'shadow-black/45'}`}>
-                              <div style={{ background: `linear-gradient(145deg, ${deckCfg.gradFrom}, ${deckCfg.gradTo})` }} className="w-full h-full rounded-[1.4rem] p-3.5 flex flex-col justify-between text-left relative overflow-hidden"><div className={`absolute inset-[2px] rounded-[1.3rem] transition-colors ${darkMode ? 'bg-[#0F0C29]/94' : 'bg-[#FFFDFB]/96'}`} /><div className="relative z-10 flex items-center justify-between w-full"><span style={{ background: `linear-gradient(135deg, ${deckCfg.gradFrom}, ${deckCfg.gradTo})` }} className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full text-white shadow-sm">#{card.number}</span><span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${deckCfg.pillBg}`}>{deckCfg.badgeLabel}</span></div>{/* Vertical Emotion Title down the left margin, directly beneath the # number badge */}<div className="absolute left-3.5 top-12 bottom-12 z-10 flex items-center select-none pointer-events-none" style={{ writingMode: 'vertical-rl' }}><span className={`text-xs sm:text-sm font-serif font-bold tracking-widest uppercase ${darkMode ? 'text-white' : 'text-slate-800'}`}>{card.name}</span></div>{/* Center Crest & Category Pill (shifted slightly right to balance the card) */}<div className="relative z-10 my-auto text-center space-y-2 pl-6 pr-2"><div className="mx-auto flex items-center justify-center group-hover/card:scale-110 transition-transform duration-300"><EmotionCardCrestSVG gradFrom={deckCfg.gradFrom} gradTo={deckCfg.gradTo} badgeLabel={`${deckCfg.badgeLabel}-${card.number}`} /></div><span className={`block text-[10px] uppercase tracking-widest font-mono opacity-80 ${themeMutedText}`}>{card.shortPart}</span></div><div className="relative z-10 flex items-center justify-between pt-2 border-t border-indigo-500/15 text-[10px] font-semibold"><span style={{ color: deckCfg.gradTo }} className="truncate">Front & Centre</span><Maximize2 style={{ color: deckCfg.gradTo }} className="w-3 h-3 shrink-0 opacity-85" /></div></div>
+                              <div style={{ background: `linear-gradient(145deg, ${deckCfg.gradFrom}, ${deckCfg.gradTo})` }} className="w-full h-full rounded-[1.4rem] p-3.5 flex flex-col justify-between text-left relative overflow-hidden"><div className={`absolute inset-[2px] rounded-[1.3rem] transition-colors ${isDark ? 'bg-[#0F0C29]/94' : 'bg-[#FFFDFB]/96'}`} /><div className="relative z-10 flex items-center justify-between w-full"><span style={{ background: `linear-gradient(135deg, ${deckCfg.gradFrom}, ${deckCfg.gradTo})` }} className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full text-white shadow-sm">#{card.number}</span><span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${deckCfg.pillBg}`}>{deckCfg.badgeLabel}</span></div><div className="relative z-10 my-auto text-center space-y-2.5 px-1"><div className="mx-auto flex items-center justify-center group-hover/card:scale-110 transition-transform duration-300"><EmotionCardCrestSVG gradFrom={deckCfg.gradFrom} gradTo={deckCfg.gradTo} badgeLabel={`${deckCfg.badgeLabel}-${card.number}`} /></div><h4 className={`text-base sm:text-lg font-serif font-bold tracking-tight leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{card.name}</h4><span className={`block text-[10px] uppercase tracking-widest ${themeMutedText}`}>{card.shortPart}</span></div><div className="relative z-10 flex items-center justify-between pt-2 border-t border-indigo-500/15 text-[10px] font-semibold"><span style={{ color: deckCfg.gradTo }} className="truncate">Front & Centre</span><Maximize2 style={{ color: deckCfg.gradTo }} className="w-3 h-3 shrink-0 opacity-85" /></div></div>
                             </button>
                           );
                         })}
@@ -2055,7 +2292,7 @@ export default function App() {
             </div>
             {activeEmotionCard && activeDeckConfig && (
               <div onClick={() => setSelectedEmotionId(null)} className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn">
-                <div onClick={e => e.stopPropagation()} style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, #D81B9E, ${activeDeckConfig.gradTo})` }} className="relative w-full max-w-4xl rounded-[2.25rem] p-[2.5px] shadow-2xl my-auto"><div className={`w-full rounded-[2.15rem] p-5 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto ${darkMode ? 'bg-[#0C0A24]/98 text-stone-100' : 'bg-[#FFFFFF]/98 text-slate-900'}`}><div className="flex flex-wrap items-center justify-between gap-4 border-b border-indigo-500/20 pb-5"><div className="flex items-center gap-4"><div style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, ${activeDeckConfig.gradTo})` }} className="w-14 h-14 rounded-2xl text-white font-mono font-bold text-xl flex items-center justify-center shadow-lg shrink-0">#{activeEmotionCard.number}</div><div><div className="flex flex-wrap items-center gap-2"><span style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, ${activeDeckConfig.gradTo})` }} className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full text-white">{activeDeckConfig.deckNumber} • {activeDeckConfig.badgeLabel}</span></div><h3 className="text-2xl sm:text-4xl font-serif font-bold tracking-tight mt-0.5">{activeEmotionCard.name}</h3></div></div><button onClick={() => setSelectedEmotionId(null)} style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, ${activeDeckConfig.gradTo})` }} className="px-4 py-2 rounded-full text-white text-xs font-semibold shadow-md hover:brightness-110 transition flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" /> Return Card to Fan</button></div><div className="grid grid-cols-1 md:grid-cols-2 gap-5"><div className={`rounded-2xl p-5 border space-y-3.5 ${themeSubtleCard}`}><div className="flex items-center justify-between border-b border-indigo-500/15 pb-2.5"><span className="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5"><UserCheck className="w-4 h-4" /> Factors (Men)</span></div><div className="space-y-2.5 text-xs sm:text-sm"><div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-1"><div className="font-bold text-rose-400 text-xs uppercase tracking-wider">Increase</div><p className="leading-relaxed">{activeEmotionCard.menFactors.increase}</p></div><div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1"><div className="font-bold text-emerald-400 text-xs uppercase tracking-wider">Decrease</div><p className="leading-relaxed">{activeEmotionCard.menFactors.decrease}</p></div></div></div><div className={`rounded-2xl p-5 border space-y-3.5 ${themeSubtleCard}`}><div className="flex items-center justify-between border-b border-indigo-500/15 pb-2.5"><span className="text-xs font-bold uppercase tracking-wider text-pink-400 flex items-center gap-1.5"><Heart className="w-4 h-4" /> Factors (Women)</span></div><div className="space-y-2.5 text-xs sm:text-sm"><div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-1"><div className="font-bold text-rose-400 text-xs uppercase tracking-wider">Increase</div><p className="leading-relaxed">{activeEmotionCard.womenFactors.increase}</p></div><div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1"><div className="font-bold text-emerald-400 text-xs uppercase tracking-wider">Decrease</div><p className="leading-relaxed">{activeEmotionCard.womenFactors.decrease}</p></div></div></div></div></div></div>
+                <div onClick={e => e.stopPropagation()} style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, #D81B9E, ${activeDeckConfig.gradTo})` }} className="relative w-full max-w-4xl rounded-[2.25rem] p-[2.5px] shadow-2xl my-auto"><div className={`w-full rounded-[2.15rem] p-5 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto ${isDark ? 'bg-[#0C0A24]/98 text-stone-100' : 'bg-[#FFFFFF]/98 text-slate-900'}`}><div className="flex flex-wrap items-center justify-between gap-4 border-b border-indigo-500/20 pb-5"><div className="flex items-center gap-4"><div style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, ${activeDeckConfig.gradTo})` }} className="w-14 h-14 rounded-2xl text-white font-mono font-bold text-xl flex items-center justify-center shadow-lg shrink-0">#{activeEmotionCard.number}</div><div><div className="flex flex-wrap items-center gap-2"><span style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, ${activeDeckConfig.gradTo})` }} className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full text-white">{activeDeckConfig.deckNumber} • {activeDeckConfig.badgeLabel}</span></div><h3 className="text-2xl sm:text-4xl font-serif font-bold tracking-tight mt-0.5">{activeEmotionCard.name}</h3></div></div><button onClick={() => setSelectedEmotionId(null)} style={{ background: `linear-gradient(135deg, ${activeDeckConfig.gradFrom}, ${activeDeckConfig.gradTo})` }} className="px-4 py-2 rounded-full text-white text-xs font-semibold shadow-md hover:brightness-110 transition flex items-center gap-1.5"><Layers className="w-3.5 h-3.5" /> Return Card to Fan</button></div><div className="grid grid-cols-1 md:grid-cols-2 gap-5"><div className={`rounded-2xl p-5 border space-y-3.5 ${themeSubtleCard}`}><div className="flex items-center justify-between border-b border-indigo-500/15 pb-2.5"><span className="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5"><UserCheck className="w-4 h-4" /> Factors (Men)</span></div><div className="space-y-2.5 text-xs sm:text-sm"><div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-1"><div className="font-bold text-rose-400 text-xs uppercase tracking-wider">Increase</div><p className="leading-relaxed">{activeEmotionCard.menFactors.increase}</p></div><div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1"><div className="font-bold text-emerald-400 text-xs uppercase tracking-wider">Decrease</div><p className="leading-relaxed">{activeEmotionCard.menFactors.decrease}</p></div></div></div><div className={`rounded-2xl p-5 border space-y-3.5 ${themeSubtleCard}`}><div className="flex items-center justify-between border-b border-indigo-500/15 pb-2.5"><span className="text-xs font-bold uppercase tracking-wider text-pink-400 flex items-center gap-1.5"><Heart className="w-4 h-4" /> Factors (Women)</span></div><div className="space-y-2.5 text-xs sm:text-sm"><div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 space-y-1"><div className="font-bold text-rose-400 text-xs uppercase tracking-wider">Increase</div><p className="leading-relaxed">{activeEmotionCard.womenFactors.increase}</p></div><div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-1"><div className="font-bold text-emerald-400 text-xs uppercase tracking-wider">Decrease</div><p className="leading-relaxed">{activeEmotionCard.womenFactors.decrease}</p></div></div></div></div></div></div>
               </div>
             )}
           </div>
@@ -2090,7 +2327,7 @@ export default function App() {
                   {lexiconCategories.map(cat => {
                     const isSelected = lexiconCategoryFilter === cat.id;
                     return (
-                      <button key={cat.id} onClick={() => { setLexiconCategoryFilter(cat.id); const nextPool = cat.id === 'All' ? LOVE_TERMS_LEXICON : cat.id === 'Saved' ? LOVE_TERMS_LEXICON.filter(t => savedLexiconIds.includes(t.id)) : LOVE_TERMS_LEXICON.filter(t => t.category === cat.id); if (nextPool.length > 0 && !nextPool.some(t => t.id === currentLexiconTerm.id)) { triggerNextRandomTermWave(null, nextPool); } }} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${isSelected ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF9E6D] text-white shadow-sm' : darkMode ? 'bg-white/5 text-indigo-200/85 hover:bg-white/10' : 'bg-stone-100 text-slate-700 hover:bg-stone-200'}`}>{cat.label}</button>
+                      <button key={cat.id} onClick={() => { setLexiconCategoryFilter(cat.id); const nextPool = cat.id === 'All' ? LOVE_TERMS_LEXICON : cat.id === 'Saved' ? LOVE_TERMS_LEXICON.filter(t => savedLexiconIds.includes(t.id)) : LOVE_TERMS_LEXICON.filter(t => t.category === cat.id); if (nextPool.length > 0 && !nextPool.some(t => t.id === currentLexiconTerm.id)) { triggerNextRandomTermWave(null, nextPool); } }} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${isSelected ? 'bg-gradient-to-r from-[#5A28FF] via-[#D81B9E] to-[#FF9E6D] text-white shadow-sm' : isDark ? 'bg-white/5 text-indigo-200/85 hover:bg-white/10' : 'bg-stone-100 text-slate-700 hover:bg-stone-200'}`}>{cat.label}</button>
                     );
                   })}
                 </div>
@@ -2100,7 +2337,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div onClick={e => triggerNextRandomTermWave(e)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); triggerNextRandomTermWave(null); } }} style={{ background: darkMode ? activePalette.darkBg : activePalette.lightBg }} className={`relative w-full min-h-[34rem] sm:min-h-[38rem] rounded-[2.75rem] border overflow-hidden cursor-pointer select-none flex flex-col justify-between p-6 sm:p-12 md:p-16 transition-all duration-700 shadow-2xl ${darkMode ? 'border-white/15 shadow-black/60 text-white' : 'border-stone-300/80 shadow-stone-300/60 text-slate-900'}`}>
+              <div onClick={e => triggerNextRandomTermWave(e)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); triggerNextRandomTermWave(null); } }} style={{ background: isDark ? activePalette.darkBg : activePalette.lightBg }} className={`relative w-full min-h-[34rem] sm:min-h-[38rem] rounded-[2.75rem] border overflow-hidden cursor-pointer select-none flex flex-col justify-between p-6 sm:p-12 md:p-16 transition-all duration-700 shadow-2xl ${isDark ? 'border-white/15 shadow-black/60 text-white' : 'border-stone-300/80 shadow-stone-300/60 text-slate-900'}`}>
                 <div style={{ background: `radial-gradient(circle, ${activePalette.orbA}3B 0%, transparent 70%)` }} className="animate-lexicon-orb absolute -top-28 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none" />
                 <div style={{ background: `radial-gradient(circle, ${activePalette.orbB}3B 0%, transparent 70%)` }} className="animate-lexicon-orb absolute -bottom-28 -right-24 w-[30rem] h-[30rem] rounded-full blur-3xl pointer-events-none" />
                 {waveTransitionState !== 'idle' && (
@@ -2111,16 +2348,16 @@ export default function App() {
                 )}
                 <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className={`px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest border backdrop-blur-md ${darkMode ? activePalette.accentBadgeDark : activePalette.accentBadgeLight}`}>{currentLexiconTerm.category}</span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-md flex items-center gap-1.5 ${darkMode ? 'bg-white/10 text-stone-200 border-white/15' : 'bg-white/75 text-slate-700 border-stone-300/80'}`}><Globe className="w-3.5 h-3.5 opacity-75" /> {currentLexiconTerm.origin}</span>
+                    <span className={`px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest border backdrop-blur-md ${isDark ? activePalette.accentBadgeDark : activePalette.accentBadgeLight}`}>{currentLexiconTerm.category}</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-md flex items-center gap-1.5 ${isDark ? 'bg-white/10 text-stone-200 border-white/15' : 'bg-white/75 text-slate-700 border-stone-300/80'}`}><Globe className="w-3.5 h-3.5 opacity-75" /> {currentLexiconTerm.origin}</span>
                   </div>
-                  <button onClick={e => { e.stopPropagation(); setSavedLexiconIds(prev => prev.includes(currentLexiconTerm.id) ? prev.filter(id => id !== currentLexiconTerm.id) : [...prev, currentLexiconTerm.id]); }} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border backdrop-blur-md transition flex items-center gap-1.5 ${isSaved ? 'bg-pink-500/25 text-pink-300 border-pink-400/50' : darkMode ? 'bg-white/10 text-stone-200 border-white/15 hover:bg-white/20' : 'bg-white/80 text-slate-700 border-stone-300 hover:bg-white'}`}><Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current text-pink-400' : ''}`} /><span>{isSaved ? 'Saved' : 'Save Term'}</span></button>
+                  <button onClick={e => { e.stopPropagation(); setSavedLexiconIds(prev => prev.includes(currentLexiconTerm.id) ? prev.filter(id => id !== currentLexiconTerm.id) : [...prev, currentLexiconTerm.id]); }} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border backdrop-blur-md transition flex items-center gap-1.5 ${isSaved ? 'bg-pink-500/25 text-pink-300 border-pink-400/50' : isDark ? 'bg-white/10 text-stone-200 border-white/15 hover:bg-white/20' : 'bg-white/80 text-slate-700 border-stone-300 hover:bg-white'}`}><Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current text-pink-400' : ''}`} /><span>{isSaved ? 'Saved' : 'Save Term'}</span></button>
                 </div>
                 <div className={`relative z-10 my-auto max-w-3xl mx-auto text-center px-2 sm:px-6 space-y-6 transition-all duration-300 ${waveTransitionState === 'surging' ? 'opacity-0 translate-y-6 scale-95 blur-[2px]' : 'opacity-100 translate-y-0 scale-100 blur-0'}`}>
                   <div className="flex items-center justify-center gap-3 opacity-75"><span style={{ backgroundColor: activePalette.orbA }} className="w-10 h-[1.5px] rounded-full" /><Waves style={{ color: activePalette.orbB }} className="w-5 h-5" /><span style={{ backgroundColor: activePalette.orbA }} className="w-10 h-[1.5px] rounded-full" /></div>
                   <h2 className="text-4xl sm:text-6xl md:text-7xl font-serif font-normal tracking-tight leading-[1.12]">{currentLexiconTerm.term}</h2>
-                  <div className={`text-xs sm:text-sm uppercase tracking-[0.22em] font-semibold ${darkMode ? 'text-pink-200/80' : 'text-slate-600'}`}>{currentLexiconTerm.origin}</div>
-                  <p className={`text-lg sm:text-2xl md:text-[1.65rem] font-serif leading-relaxed max-w-2xl mx-auto ${darkMode ? 'text-stone-100/95' : 'text-slate-800'}`}>“{currentLexiconTerm.definition}”</p>
+                  <div className={`text-xs sm:text-sm uppercase tracking-[0.22em] font-semibold ${isDark ? 'text-pink-200/80' : 'text-slate-600'}`}>{currentLexiconTerm.origin}</div>
+                  <p className={`text-lg sm:text-2xl md:text-[1.65rem] font-serif leading-relaxed max-w-2xl mx-auto ${isDark ? 'text-stone-100/95' : 'text-slate-800'}`}>“{currentLexiconTerm.definition}”</p>
                 </div>
                 <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-current/10 text-xs">
                   <div className="flex items-center gap-2 opacity-80"><span style={{ background: `linear-gradient(135deg, ${activePalette.orbA}, ${activePalette.orbB})` }} className="w-3.5 h-3.5 rounded-full inline-block shadow-sm border border-white/40" /><span>{activePalette.name}</span></div>
@@ -2154,7 +2391,7 @@ export default function App() {
                       {[{ val: 1, label: '1 • Strongly Disagree' }, { val: 2, label: '2 • Disagree' }, { val: 3, label: '3 • Neutral' }, { val: 4, label: '4 • Agree' }, { val: 5, label: '5 • Strongly Agree' }].map(opt => {
                         const selected = personaAnswers[q.id] === opt.val;
                         return (
-                          <button key={opt.val} onClick={() => setPersonaAnswers(prev => ({ ...prev, [q.id]: opt.val }))} className={`py-2.5 px-2 rounded-2xl text-xs font-semibold border transition-all flex flex-col items-center justify-center gap-1 ${selected ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white border-cyan-400 shadow-md' : darkMode ? 'bg-[#191645]/90 text-indigo-200 border-indigo-500/25 hover:bg-indigo-900/60' : 'bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100'}`}>
+                          <button key={opt.val} onClick={() => setPersonaAnswers(prev => ({ ...prev, [q.id]: opt.val }))} className={`py-2.5 px-2 rounded-2xl text-xs font-semibold border transition-all flex flex-col items-center justify-center gap-1 ${selected ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white border-cyan-400 shadow-md' : isDark ? 'bg-[#191645]/90 text-indigo-200 border-indigo-500/25 hover:bg-indigo-900/60' : 'bg-stone-50 text-slate-700 border-stone-200 hover:bg-stone-100'}`}>
                             <span className="text-sm font-bold">{opt.val}</span><span className="hidden sm:inline text-[11px] opacity-90 text-center">{opt.label.split('• ')[1]}</span>
                           </button>
                         );
@@ -2170,15 +2407,15 @@ export default function App() {
             ) : (
               personaAnalysis && (
                 <div className="space-y-8 animate-fadeIn">
-                  <div className={`relative overflow-hidden rounded-[2.25rem] p-8 sm:p-12 border shadow-2xl transition-all duration-500 ${darkMode ? 'bg-gradient-to-br from-[#0A0B1A] via-[#101435] to-[#150B25] border-indigo-500/30' : 'bg-gradient-to-br from-[#FAF8FC] via-[#F3EDF8] to-[#FDF3F3] border-indigo-200'}`}>
+                  <div className={`relative overflow-hidden rounded-[2.25rem] p-8 sm:p-12 border shadow-2xl transition-all duration-500 ${isDark ? 'bg-gradient-to-br from-[#0A0B1A] via-[#101435] to-[#150B25] border-indigo-500/30' : 'bg-gradient-to-br from-[#FAF8FC] via-[#F3EDF8] to-[#FDF3F3] border-indigo-200'}`}>
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
                       <div className="flex-1 space-y-5 text-center md:text-left">
                         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-sm"><UserCircle className="w-3.5 h-3.5" /> Dominant Emotional Baseline</div>
                         <h3 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight">{personaAnalysis.resultData.name} Archetype</h3>
-                        <p className={`text-base sm:text-lg leading-relaxed ${darkMode ? 'text-indigo-100/90' : 'text-slate-700'}`}>Your primary intrinsic reaction style leans towards <strong>{personaAnalysis.dominantTrait}</strong>.</p>
-                        <div className={`mt-6 p-6 rounded-2xl border backdrop-blur-sm ${darkMode ? 'bg-black/30 border-white/10' : 'bg-white/60 border-stone-200'}`}>
+                        <p className={`text-base sm:text-lg leading-relaxed ${isDark ? 'text-indigo-100/90' : 'text-slate-700'}`}>Your primary intrinsic reaction style leans towards <strong>{personaAnalysis.dominantTrait}</strong>.</p>
+                        <div className={`mt-6 p-6 rounded-2xl border backdrop-blur-sm ${isDark ? 'bg-black/30 border-white/10' : 'bg-white/60 border-stone-200'}`}>
                           <h4 className="text-sm font-bold uppercase tracking-wider text-indigo-400 mb-2">Recommended Management Strategy</h4>
-                          <p className={`text-sm leading-relaxed ${darkMode ? 'text-stone-200' : 'text-slate-700'}`}>{personaAnalysis.resultData.description}</p>
+                          <p className={`text-sm leading-relaxed ${isDark ? 'text-stone-200' : 'text-slate-700'}`}>{personaAnalysis.resultData.description}</p>
                         </div>
                       </div>
                       <div className="shrink-0 animate-[lexiconFloatSlow_6s_ease-in-out_infinite]">
@@ -2193,9 +2430,17 @@ export default function App() {
         )}
       </main>
 
-      <footer className={`relative z-10 border-t py-5 px-4 sm:px-6 mt-12 transition-colors ${darkMode ? 'border-indigo-500/20 bg-[#08071E]/80 text-indigo-200/60' : 'border-stone-200 bg-white/70 text-slate-500'}`}>
+      <footer className={`relative z-10 border-t py-5 px-4 sm:px-6 mt-12 transition-colors ${isDark ? 'border-indigo-500/20 bg-[#08071E]/80 text-indigo-200/60' : 'border-stone-200 bg-white/70 text-slate-500'}`}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2.5"><RubyGradientLogo darkMode={darkMode} size={24} /><span className="font-semibold">Ruby Home</span></div>
+          <div className="flex items-center gap-2.5">
+            <FacetedRubyLogo
+              colorIndex={rubyColorIndex}
+              darkMode={isDark}
+              size={26}
+              onClick={cycleRandomRubyColor}
+            />
+            <span className="font-semibold">Ruby Home</span>
+          </div>
           <div>20 Priority Principles • 22 Fanned Emotions • 28 Ruby Indicators • 30 Reference Texts • 120 Lexicon Terms • 5 Persona Archetypes</div>
         </div>
       </footer>
