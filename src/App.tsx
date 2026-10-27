@@ -71,7 +71,19 @@ function RubyGradientLogo({ darkMode, size = 44, className = '' }) {
       <svg viewBox="0 0 120 120" className="w-[82%] h-[82%] drop-shadow-sm" fill="none">
         <defs>
           <linearGradient id="leftLobeGrad" x1="15" y1="22" x2="60" y2="95" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#6E3AFF" />
+            <s// ... existing code ...
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    // Applies a strict light, monochrome color palette
+    <div className="min-h-screen bg-white text-slate-900 grayscale selection:bg-slate-300">
+      <TopNavigation />
+      <main className="max-w-4xl mx-auto p-4">
+        {children}
+      </main>
+    </div>
+  );
+} offset="0%" stopColor="#6E3AFF" />
             <stop offset="50%" stopColor="#4618F2" />
             <stop offset="100%" stopColor="#1B75FF" />
           </linearGradient>
