@@ -4,16 +4,7 @@ import {
   Sparkles,
   Compass,
   BookOpen,
-  Search,
   CheckCircle2,
-  AlertTriangle,
-  ArrowRight,
-  RotateCcw,
-  Award,
-  Sun,
-  Moon,
-  ChevronRight,
-  ChevronDown,
   X,
   Activity,
   Scale,
@@ -25,13 +16,15 @@ import {
   Link,
   MessageSquare,
   Gift,
-  Shield,
   Users,
   Smile,
-  Zap,
-  CheckCircle,
+  Award,
   Key,
-  ArrowUp
+  ArrowUp,
+  Sun,
+  Moon,
+  ChevronDown,
+  RotateCcw
 } from 'lucide-react';
 
 // ============================================================================
@@ -41,7 +34,7 @@ import {
 export const RUBY_GEM_PALETTES = [
   {
     id: 'gem-magenta',
-    name: 'Magenta Ruby',
+    name: 'Magenta Ruby (Top-Left Default)',
     glow: 'rgba(255, 16, 128, 0.65)',
     borderGlow: '#FF1080',
     appBgDark: '#0D0518',
@@ -55,7 +48,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-sapphire',
-    name: 'Sapphire Cobalt',
+    name: 'Sapphire Cobalt (Top-Center)',
     glow: 'rgba(0, 110, 255, 0.65)',
     borderGlow: '#0066FF',
     appBgDark: '#040B1D',
@@ -69,7 +62,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-emerald',
-    name: 'Neon Emerald',
+    name: 'Neon Emerald (Top-Right)',
     glow: 'rgba(0, 235, 120, 0.65)',
     borderGlow: '#00E676',
     appBgDark: '#03140C',
@@ -83,7 +76,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-crimson',
-    name: 'Crimson Scarlet',
+    name: 'Crimson Scarlet (Middle-Left)',
     glow: 'rgba(255, 20, 60, 0.65)',
     borderGlow: '#FF1744',
     appBgDark: '#170408',
@@ -97,7 +90,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-cyan',
-    name: 'Aqua Cyan',
+    name: 'Aqua Cyan (Middle-Center)',
     glow: 'rgba(0, 230, 255, 0.65)',
     borderGlow: '#00E5FF',
     appBgDark: '#03151D',
@@ -111,7 +104,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-amethyst',
-    name: 'Amethyst Violet',
+    name: 'Amethyst Violet (Middle-Right)',
     glow: 'rgba(175, 80, 255, 0.65)',
     borderGlow: '#A855F7',
     appBgDark: '#120521',
@@ -125,7 +118,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-gold',
-    name: 'Champagne Gold',
+    name: 'Champagne Gold (Bottom-Left)',
     glow: 'rgba(255, 185, 30, 0.65)',
     borderGlow: '#F59E0B',
     appBgDark: '#1A1104',
@@ -139,9 +132,9 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-diamond-ice',
-    name: 'Platinum Ice Diamond',
+    name: 'Platinum Ice Diamond (Bottom-Center)',
     glow: 'rgba(220, 235, 255, 0.65)',
-    borderGlow: '#CBD5E1',
+    borderGlow: '#E2E8F0',
     appBgDark: '#0B0F19',
     appBgLight: '#F8FAFC',
     c1: '#FFFFFF',
@@ -153,7 +146,7 @@ export const RUBY_GEM_PALETTES = [
   },
   {
     id: 'gem-rose-gold',
-    name: 'Rose Coral',
+    name: 'Rose Coral (Bottom-Right)',
     glow: 'rgba(255, 120, 150, 0.65)',
     borderGlow: '#FB7185',
     appBgDark: '#18070F',
@@ -167,11 +160,17 @@ export const RUBY_GEM_PALETTES = [
   }
 ];
 
-// ============================================================================
-// CUSTOM SVG GEMSTONE & SEAL COMPONENTS
-// ============================================================================
-
-function FacetedRubyLogo({ colorIndex = 0, darkMode, size = 44, onClick }) {
+function FacetedRubyLogo({
+  colorIndex = 0,
+  darkMode,
+  size = 44,
+  onClick
+}: {
+  colorIndex?: number;
+  darkMode?: boolean;
+  size?: number;
+  onClick?: (e: React.MouseEvent) => void;
+}) {
   const p = RUBY_GEM_PALETTES[colorIndex] || RUBY_GEM_PALETTES[0];
 
   return (
@@ -244,8 +243,8 @@ function FacetedRubyLogo({ colorIndex = 0, darkMode, size = 44, onClick }) {
   );
 }
 
-function TieredHeartIcon({ tier = 'bronze', darkMode, size = 140 }) {
-  const tColors = {
+function TieredHeartIcon({ tier = 'bronze', darkMode, size = 140 }: { tier?: string; darkMode?: boolean; size?: number }) {
+  const tColors: Record<string, any> = {
     bronze: { glow: 'from-orange-700/25 via-amber-600/20 to-yellow-500/15', p1: '#803300', p2: '#994500', p3: '#4D2200', p4: '#BF5500', p5: '#E67300', p6: '#CC6600', p7: '#B35900', p8: '#663300', p9: '#FFCC99' },
     silver: { glow: 'from-slate-500/25 via-gray-400/20 to-zinc-300/15', p1: '#637385', p2: '#7A8A9C', p3: '#333F4D', p4: '#8A99A8', p5: '#B4C2D1', p6: '#92A2B3', p7: '#A2B2C2', p8: '#4A5768', p9: '#E8F0F8' },
     gold: { glow: 'from-yellow-600/25 via-amber-500/20 to-yellow-400/15', p1: '#997300', p2: '#B38600', p3: '#4D3900', p4: '#CC9900', p5: '#FFD700', p6: '#E6B800', p7: '#FFC125', p8: '#664C00', p9: '#FFF0B3' },
@@ -286,7 +285,7 @@ function TieredHeartIcon({ tier = 'bronze', darkMode, size = 140 }) {
   );
 }
 
-function RadiantGreenRubyIcon({ size = 64 }) {
+function RadiantGreenRubyIcon({ size = 64 }: { size?: number }) {
   return (
     <svg viewBox="0 0 160 160" width={size} height={size} className="drop-shadow-[0_0_16px_rgba(16,185,129,0.55)] select-none shrink-0" fill="none">
       <defs>
@@ -309,7 +308,7 @@ function RadiantGreenRubyIcon({ size = 64 }) {
   );
 }
 
-function FracturedBlackRubyIcon({ size = 64 }) {
+function FracturedBlackRubyIcon({ size = 64 }: { size?: number }) {
   return (
     <svg viewBox="0 0 160 160" width={size} height={size} className="drop-shadow-[0_0_16px_rgba(99,102,241,0.5)] select-none shrink-0" fill="none">
       <path d="M77 139 C77 139 15 97 15 54 C15 28 35 16 55 16 C67 16 74 24 77 34 L73 53 L80 72 L72 95 L78 115 Z" fill="#0F172A" stroke="#38BDF8" strokeWidth="1.4" />
@@ -319,7 +318,7 @@ function FracturedBlackRubyIcon({ size = 64 }) {
   );
 }
 
-function PersonaGemIcon({ type, size = 120 }) {
+function PersonaGemIcon({ type, size = 120 }: { type: string; size?: number }) {
   if (type === 'Passion') {
     return (
       <svg viewBox="0 0 100 100" width={size} height={size} className="drop-shadow-[0_0_15px_rgba(255,0,50,0.65)]">
@@ -387,38 +386,13 @@ const TOP_20_ADVICE = [
   { rank: 20, title: "Keep Interactions Lighthearted and Humorous", description: "Utilize playfulness and humor to diffuse tension, remaining relaxed and avoiding taking minor relationship friction too seriously.", category: "Devotion & Warmth", checkInQuestion: "How often did your partner bring playfulness, warmth, and humor into your daily life to diffuse minor tension?", relatedMistakeId: 2, recommendedBooks: ["Modern Dating: A Field Guide", "The Alabaster Girl", "Social Intelligence: The New Science of Human Relationships"] }
 ];
 
-const COMMON_MISTAKES = [
-  { id: 1, title: "Trying to Change, 'Fix,' or Control Your Partner", mistake: "Partners frequently create friction by refusing to accept each other as they are. Women often form a 'home-improvement committee,' offering unsolicited advice that leaves men feeling controlled. Conversely, men interrupt to offer logical solutions when a woman simply wants empathy.", fix: "Practice unconditional acceptance. Men should listen without fixing; women should avoid unsolicited advice." },
-  { id: 2, title: "Destructive Conflict Behaviors (Blame, Contempt, and Withdrawal)", mistake: "Engaging in mutual blame, contempt, sarcasm, or stonewalling destroys emotional safety.", fix: "Soften your startup, accept repair attempts, and self-soothe to prevent flooding." },
-  { id: 3, title: "Failing to Set Boundaries and Tolerating Poor Behavior", mistake: "Excusing bad behavior or staying in undefined dynamics out of fear of losing someone invites disrespect.", fix: "Set clear boundaries early and judge your partner by consistent actions rather than promises." },
-  { id: 4, title: "Losing Individual Identity and Smothering the Relationship (Neediness)", mistake: "Making the relationship the sole focus of life extinguishes attraction and mystery.", fix: "Maintain your life mission, hobbies, and healthy breathing room." },
-  { id: 5, title: "Expecting Mind-Reading and Avoiding Direct Communication", mistake: "Assuming a partner can read your mind suppresses true feelings and breeds passive-aggressive resentment.", fix: "Communicate your feelings, boundaries, and requests clearly and gracefully." }
-];
-
-const MALE_DOS_DONTS = [
-  { doTitle: "Do prioritize your life's purpose", doDesc: "Maintain your personal mission and goals above the relationship to retain your masculine drive.", dontTitle: "Don't act needy", dontDesc: "Avoid over-investing early in a relationship or seeking constant validation." },
-  { doTitle: "Do let her chase you", doDesc: "Allow the woman to come to you and express her interest to build her attraction.", dontTitle: "Don't over-communicate", dontDesc: "Do not bombard a woman with text messages or calls if she does not respond immediately." },
-  { doTitle: "Do listen to her feelings", doDesc: "When a woman is upset, listen to her vent without immediately trying to offer logical solutions or fix her problems.", dontTitle: "Don't rely on pure logic", dontDesc: "Do not try to convince a woman to like you using rational arguments when her decisions are emotionally driven." },
-  { doTitle: "Do remain centered", doDesc: "Maintain your emotional stability and remain unbothered when a woman tests your boundaries.", dontTitle: "Don't offer unsolicited advice", dontDesc: "Do not try to 'fix' her when she simply wants to be heard and understood." },
-  { doTitle: "Do lead the interaction", doDesc: "Make definitive plans for dates and confidently direct the relationship.", dontTitle: "Don't lose your focus", dontDesc: "Do not prioritize the relationship over your own masculine drive, options, and freedom." }
-];
-
-const FEMALE_DOS_DONTS = [
-  { doTitle: "Do maintain your independence", doDesc: "Cultivate your own hobbies and social life rather than making a man the center of your universe.", dontTitle: "Don't chase a man", dontDesc: "Do not initiate calls, ask him out first, or try to force a relationship to progress." },
-  { doTitle: "Do let the man take the lead", doDesc: "Allow him to pursue you, initiate calls, and arrange dates.", dontTitle: "Don't offer unsolicited advice", dontDesc: "Do not give a man unprompted instructions, as he will interpret it as criticism or an implication that he is broken." },
-  { doTitle: "Do show appreciation", doDesc: "Trust in a man and validate his efforts to fulfill his need to feel capable and accepted.", dontTitle: "Don't try to change him", dontDesc: "Do not attempt to alter a man's habits, friends, or life choices." },
-  { doTitle: "Do give him space", doDesc: "Allow a man to withdraw into his 'cave' when he is stressed, trusting that he will return when ready.", dontTitle: "Don't over-analyze perceived flaws", dontDesc: "Do not rely on a rigid checklist to dissect a man's shortcomings." },
-  { doTitle: "Do set healthy boundaries", doDesc: "Be willing to walk away from relationships that are destructive or fail to meet your needs.", dontTitle: "Don't follow him into his 'cave'", dontDesc: "Do not demand that he talk about his problems or emotions before he is ready." }
-];
-
-const FIVE_WS_DATA = {
+const FIVE_WS_DATA: Record<string, any> = {
   female: {
     label: "The Female Perspective: Choosing a Partner",
     subtitle: "Clarity, discernment, and emotional wisdom when selecting a life partner",
     items: [
       { type: "Who", question: "Who is actually right for me?", points: ["Eliminate shallow dealbreakers like height and prioritize emotional maturity, kindness, and fidelity.", "Shared long-term values trump temporary infatuation.", "Chasing an obsessive high-chemistry spark often blinds you to destructive behaviors."] },
-      { type: "What", question: "What are their true intentions?", points: ["A partner with genuine intentions expresses goals transparently.", "Lack of effort, ambiguous signals, or unreliability indicate low romantic commitment.", "Actions always outshine verbal promises."] },
-      { type: "When", question: "When should I offer commitment?", points: ["Allow courtship to unfold naturally without rushing milestones.", "Observe how he handles stress, conflict, and boundaries over time before over-investing."] }
+      { type: "What", question: "What are their true intentions?", points: ["A partner with genuine intentions expresses goals transparently.", "Lack of effort, ambiguous signals, or unreliability indicate low romantic commitment.", "Actions always outshine verbal promises."] }
     ]
   },
   male: {
@@ -426,8 +400,7 @@ const FIVE_WS_DATA = {
     subtitle: "Authentic confidence, grounded leadership, and overcoming people-pleasing",
     items: [
       { type: "Who", question: "Who do I need to become?", points: ["Discard the people-pleasing paradigm; living with integrity and self-respect attracts authentic bonds.", "True confidence is forged by unashamed vulnerability rather than fabricated personas.", "Prioritize your highest life mission above constant validation."] },
-      { type: "What", question: "What triggers attraction?", points: ["Women respond to emotional presence, grounded leadership, and calm stability during stressful moments.", "Maintain polarity and breathing room instead of smothering."] },
-      { type: "How", question: "How do I lead with empathy?", points: ["Embody the 'Tender Defender'—combining genuine kindness and active listening with decisive strength.", "Listen to her internal world without immediately jumping to analytical fixes."] }
+      { type: "What", question: "What triggers attraction?", points: ["Women respond to emotional presence, grounded leadership, and calm stability during stressful moments.", "Maintain polarity and breathing room instead of smothering."] }
     ]
   },
   relationship: {
@@ -435,8 +408,7 @@ const FIVE_WS_DATA = {
     subtitle: "Conscious partnership, emotional repair, and enduring shared meaning",
     items: [
       { type: "Who", question: "Who are we as a unified team?", points: ["Treat your partner as an autonomous individual worthy of dignity and respect.", "Balance intimacy with personal hobbies and space to preserve polarity."] },
-      { type: "What", question: "What is our conflict resolution style?", points: ["Replace harsh criticism with soft startups and gentle requests.", "Look beneath surface anger to address underlying attachment fears."] },
-      { type: "Why", question: "Why do long-term bonds thrive?", points: ["Because both partners continue courtship, speak each other's love language, and forgive readily without keeping score."] }
+      { type: "What", question: "What is our conflict resolution style?", points: ["Replace harsh criticism with soft startups and gentle requests.", "Look beneath surface anger to address underlying attachment fears."] }
     ]
   }
 };
@@ -472,29 +444,23 @@ const REFERENCE_BOOKS = [
 
 const BEHAVIOUR_QUIZ_QUESTIONS = [
   { id: "bq1", scenario: "When one of you is stressed and venting about a frustrating day, what usually happens?", dimension: "Empathy vs. Fixing", options: [{ label: "We interrupt with logical solutions or unsolicited advice on what should have been done.", lagScore: 3, points: 1 }, { label: "We listen for a minute, but quickly get impatient or change the topic.", lagScore: 2, points: 3 }, { label: "We listen deeply and validate feelings without trying to fix them.", lagScore: 0, points: 5 }] },
-  { id: "bq2", scenario: "How have disagreements begun over the past two weeks?", dimension: "Conflict Startup & Repair", options: [{ label: "With sharp blame, eye-rolling, sarcasm, or shutting down.", lagScore: 3, points: 1 }, { label: "With defensiveness and keeping a scoreboard of who owes more effort.", lagScore: 2, points: 3 }, { label: "With a gentle startup and quick mutual repair attempts.", lagScore: 0, points: 5 }] },
-  { id: "bq3", scenario: "How do you balance personal autonomy with togetherness?", dimension: "Autonomy & Polarity", options: [{ label: "We feel anxious when apart or make the relationship our entire identity.", lagScore: 3, points: 1 }, { label: "We take space occasionally, but sometimes guilt each other for independent hobbies.", lagScore: 2, points: 3 }, { label: "We enthusiastically support each other's personal mission, hobbies, and breathing room.", lagScore: 0, points: 5 }] }
+  { id: "bq2", scenario: "How have disagreements begun over the past two weeks?", dimension: "Conflict Startup & Repair", options: [{ label: "With sharp blame, eye-rolling, sarcasm, or shutting down.", lagScore: 3, points: 1 }, { label: "With defensiveness and keeping a scoreboard of who owes more effort.", lagScore: 2, points: 3 }, { label: "With a gentle startup and quick mutual repair attempts.", lagScore: 0, points: 5 }] }
 ];
 
 const EMOTIONS_DECK = [
-  { id: 1, number: "01", name: "Anger", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Feeling controlled, micromanaged, or having competence questioned.", decrease: "Retreating to their 'cave' to cool down and solve issues autonomously." }, womenFactors: { increase: "Feelings invalidated, dismissed, or met with defensive logic.", decrease: "Talking through problems and feeling genuinely heard and validated." } },
-  { id: 2, number: "02", name: "Disgust", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Perceived disrespect, emasculation, or chronic ingratitude.", decrease: "Appreciation, warmth, and mutual respect." }, womenFactors: { increase: "Emotional unavailability, dishonesty, or poor self-discipline.", decrease: "Emotional presence, integrity, and active listening." } },
-  { id: 3, number: "03", name: "Fear", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Fear of inadequacy, rejection, or failing to protect and provide.", decrease: "Trust in his capabilities and explicit appreciation." }, womenFactors: { increase: "Fear of emotional abandonment, mixed signals, or stonewalling.", decrease: "Consistent reassurance, transparency, and emotional safety." } },
-  { id: 4, number: "04", name: "Sadness", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Feeling unappreciated or disconnected from purpose and respect.", decrease: "Silent companionship, physical affection, and non-judgmental space." }, womenFactors: { increase: "Feeling emotionally unseen, lonely within the bond, or taken for granted.", decrease: "Empathetic holding, active listening, and tender courtship." } },
-  { id: 5, number: "05", name: "Joy", part: "Part II: Bonding Emotions", shortPart: "Bonding Emotion", menFactors: { increase: "Successfully making his partner happy, shared playfulness, and admiration.", decrease: "Constant criticism or treating every interaction like a chore." }, womenFactors: { increase: "Thoughtful romantic gestures, deep conversation, and shared laughter.", decrease: "Complacency, neglect of courtship, or emotional distance." } },
-  { id: 6, number: "06", name: "Contempt", part: "Part III: The Four Horsemen", shortPart: "Toxic Hazard", menFactors: { increase: "Simmering unspoken resentment and perceived nagging.", decrease: "Practicing daily gratitude and communicating boundaries early." }, womenFactors: { increase: "Unresolved mental load and feeling chronically unheard.", decrease: "Replacing sarcasm with gentle requests and building a culture of appreciation." } }
+  { id: 1, number: "01", name: "Anger", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Feeling controlled or competence questioned.", decrease: "Retreating to their 'cave' to solve issues alone." }, womenFactors: { increase: "Feelings invalidated or dismissed.", decrease: "Talking through problems and feeling heard." } },
+  { id: 2, number: "02", name: "Disgust", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Perceived emasculation.", decrease: "Vulnerability and charm." }, womenFactors: { increase: "Emotional unavailability.", decrease: "Emotional presence and active listening." } },
+  { id: 3, number: "03", name: "Fear", part: "Part I: Basic Emotions", shortPart: "Basic Emotion", menFactors: { increase: "Sexual rejection or failure to protect.", decrease: "Achieving status and competence." }, womenFactors: { increase: "Emotional abandonment.", decrease: "Consistent emotional reassurance." } }
 ];
 
 const LOVE_TERMS_LEXICON = [
   { id: 'lt-1', term: "Ya'aburnee", origin: "Arabic", category: "Global & Untranslatable Words", definition: "The hope that you will outlive your loved one because living without them would be unbearable." },
   { id: 'lt-2', term: "Koi No Yokan", origin: "Japanese", category: "Global & Untranslatable Words", definition: "The unspoken realization upon first meeting someone that you are destined to fall in love." },
   { id: 'lt-3', term: "Cwtch", origin: "Welsh", category: "Global & Untranslatable Words", definition: "A warm, affectionate hug that acts as a safe sanctuary for the other person." },
-  { id: 'lt-4', term: "Geborgenheit", origin: "German", category: "Global & Untranslatable Words", definition: "A state of complete physical and emotional safety and trust shared with a partner." },
-  { id: 'lt-5', term: "Forelsket", origin: "Norwegian", category: "Global & Untranslatable Words", definition: "The unmistakable, euphoric rush of energy experienced when you first begin falling in love." },
-  { id: 'lt-6', term: "Cafuné", origin: "Brazilian Portuguese", category: "Global & Untranslatable Words", definition: "The tender act of running your fingers gently through the hair of someone you love." }
+  { id: 'lt-4', term: "Geborgenheit", origin: "German", category: "Global & Untranslatable Words", definition: "A state of complete physical and emotional safety and trust shared with a partner." }
 ];
 
-const PERSONA_ARCHETYPES = {
+const PERSONA_ARCHETYPES: Record<string, { title: string; subtitle: string; color: string; description: string; advice: string }> = {
   Passion: {
     title: "The Crimson Flame (Passion)",
     subtitle: "High Intensity • Direct • Fiercely Devoted",
@@ -551,30 +517,26 @@ const PERSONA_QUESTIONS = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('sanctuary');
-  // 1) Default page color is Light Mode across all tabs; toggleable via "amor fati"
   const [darkMode, setDarkMode] = useState(false);
   const [rubyColorIndex, setRubyColorIndex] = useState(0);
-  const [selectedTableBook, setSelectedTableBook] = useState(null);
+  const [selectedTableBook, setSelectedTableBook] = useState<any>(null);
 
-  // Relationships Dropdown State (Hover + Click-to-Pin with 250ms delay bridge)
+  // Relationships Dropdown State
   const [relDropdownOpen, setRelDropdownOpen] = useState(false);
   const [relDropdownPinned, setRelDropdownPinned] = useState(false);
-  const relDropdownRef = useRef(null);
-  const closeTimeoutRef = useRef(null);
+  const relDropdownRef = useRef<HTMLDivElement>(null);
+  const closeTimeoutRef = useRef<any>(null);
 
   // Check-In State
-  const [checkInAnswers, setCheckInAnswers] = useState(() => {
-    const init = {};
+  const [checkInAnswers, setCheckInAnswers] = useState<Record<number, number>>(() => {
+    const init: Record<number, number> = {};
     TOP_20_ADVICE.forEach(a => { init[a.rank] = 0; });
     return init;
   });
   const [checkInSubmitted, setCheckInSubmitted] = useState(false);
 
-  // Quotes Search State
-  const [quoteSearch, setQuoteSearch] = useState('');
-
   // Behaviour Quiz State
-  const [quizAnswers, setQuizAnswers] = useState({});
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
 
   // Rubies Swipe State
@@ -584,13 +546,13 @@ export default function App() {
   const [fiveWsTab, setFiveWsTab] = useState('female');
 
   // Restored Emotional Persona Quiz State
-  const [personaAnswers, setPersonaAnswers] = useState({});
+  const [personaAnswers, setPersonaAnswers] = useState<Record<number, number>>({});
   const [personaSubmitted, setPersonaSubmitted] = useState(false);
-  const [selectedArchetypePreview, setSelectedArchetypePreview] = useState('Empathy');
+  const [selectedArchetypePreview, setSelectedArchetypePreview] = useState<string>('Empathy');
 
   const isDark = darkMode;
 
-  const cycleRandomRubyColor = (e) => {
+  const cycleRandomRubyColor = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     setRubyColorIndex(prev => {
       let next = Math.floor(Math.random() * RUBY_GEM_PALETTES.length);
@@ -615,13 +577,13 @@ export default function App() {
 
   // Outside click & Escape handler for Relationships dropdown
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (relDropdownRef.current && !relDropdownRef.current.contains(e.target)) {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      if (relDropdownRef.current && !relDropdownRef.current.contains(e.target as Node)) {
         setRelDropdownOpen(false);
         setRelDropdownPinned(false);
       }
     };
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setRelDropdownOpen(false);
         setRelDropdownPinned(false);
@@ -701,7 +663,7 @@ export default function App() {
 
   // Compute Dominant Emotional Persona from Quiz Answers
   const computedPersona = useMemo(() => {
-    const totals = {
+    const totals: Record<string, number> = {
       Passion: 0,
       Vigilant: 0,
       Empathy: 0,
@@ -723,40 +685,27 @@ export default function App() {
     return { topKey, totals };
   }, [personaAnswers]);
 
-  const filteredQuotes = useMemo(() => {
-    if (!quoteSearch.trim()) return CURATED_QUOTES;
-    const q = quoteSearch.toLowerCase();
-    return CURATED_QUOTES.filter(
-      item =>
-        item.quote.toLowerCase().includes(q) ||
-        item.source.toLowerCase().includes(q) ||
-        item.theme.toLowerCase().includes(q)
-    );
-  }, [quoteSearch]);
-
   return (
     <div className={`min-h-screen font-sans transition-colors duration-500 flex flex-col selection:bg-pink-500 selection:text-white ${isDark ? 'bg-[#0A0818] text-stone-100' : 'bg-[#F8F6F2] text-[#141229]'}`}>
-      {/* Top Header (Elevated to z-50 with solid opaque surface so Dropdown never bleeds into main content) */}
+      {/* Top Header */}
       <header className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-colors duration-500 ${isDark ? 'bg-[#08071E]/95 border-indigo-500/20' : 'bg-[#F6F5F0]/95 border-stone-200/90'}`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3.5 select-none">
             <FacetedRubyLogo colorIndex={rubyColorIndex} darkMode={isDark} size={44} onClick={cycleRandomRubyColor} />
             <div onClick={() => setActiveTab('sanctuary')} className="cursor-pointer group">
-              {/* Very muted dark grey monochrome color for "Ruby Home" */}
               <h1 className={`text-lg sm:text-xl font-serif font-bold tracking-tight transition-colors ${isDark ? 'text-stone-400' : 'text-neutral-600'}`}>
                 Ruby Home
               </h1>
             </div>
           </div>
 
-          {/* "amor fati" button styled with a very light subtle gradient background */}
           <button
             onClick={() => setDarkMode(!darkMode)}
             title="Toggle Light and Dark Mode"
             className={`px-4 py-2 rounded-full text-xs font-serif italic font-medium flex items-center gap-2 border shadow-sm transition-all active:scale-95 ${
               isDark
-                ? 'bg-gradient-to-r from-stone-800 via-indigo-950/80 to-stone-800 text-stone-300 border-white/15 hover:border-white/25'
-                : 'bg-gradient-to-r from-stone-100 via-rose-50/80 to-indigo-50/80 text-stone-600 border-stone-200/90 hover:from-stone-200/70 hover:to-indigo-100/60'
+                ? 'bg-gradient-to-r from-stone-800/90 via-indigo-950/80 to-stone-800/90 text-stone-200 border-white/15 hover:border-white/25'
+                : 'bg-gradient-to-r from-stone-100 via-rose-50/70 to-indigo-50/70 text-stone-600 border-stone-200/90 hover:from-stone-200/70 hover:to-indigo-100/60'
             }`}
           >
             {isDark ? <Sun className="w-3.5 h-3.5 text-amber-300/90" /> : <Moon className="w-3.5 h-3.5 text-stone-500" />}
@@ -767,7 +716,6 @@ export default function App() {
         {/* Navigation Bar */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-2.5">
           <nav className="flex items-center flex-wrap gap-1.5 sm:gap-2.5 relative">
-            {/* For You Button */}
             <button
               onClick={() => {
                 setActiveTab('sanctuary');
@@ -786,7 +734,7 @@ export default function App() {
               <span>For You</span>
             </button>
 
-            {/* Relationships Dropdown Container with Hover-Intent Bridge + 100% Solid Opaque Surface */}
+            {/* Relationships Dropdown Container */}
             <div
               ref={relDropdownRef}
               onMouseEnter={handleRelMouseEnter}
@@ -815,14 +763,14 @@ export default function App() {
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 opacity-85 ${relDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* 100% Solid Opaque Dropdown Menu (z-[100]) */}
+              {/* Solid Opaque Dropdown Menu */}
               {relDropdownOpen && (
                 <div className="fixed inset-x-3 top-[112px] sm:absolute sm:inset-x-auto sm:left-0 sm:top-full pt-2.5 z-[100]">
                   <div
                     className={`w-full sm:w-[36rem] rounded-3xl border p-3.5 transition-all ${
                       isDark
-                        ? 'bg-[#130F26] border-indigo-500/40 text-stone-100 shadow-2xl'
-                        : 'bg-white border-stone-200 text-slate-900 shadow-2xl'
+                        ? 'bg-[#130F26] border-indigo-500/40 text-stone-100 shadow-[0_24px_60px_rgba(0,0,0,0.85)]'
+                        : 'bg-[#FFFFFF] border-stone-200 text-slate-900 shadow-[0_24px_60px_rgba(15,23,42,0.18)]'
                     }`}
                   >
                     <div className={`flex items-center justify-between px-3 py-2 mb-1.5 border-b ${isDark ? 'border-indigo-500/20' : 'border-stone-200/80'}`}>
@@ -889,7 +837,6 @@ export default function App() {
               )}
             </div>
 
-            {/* Philosophy Heading */}
             <button
               onClick={() => {
                 setActiveTab('philosophy');
@@ -908,7 +855,6 @@ export default function App() {
               <span>Philosophy</span>
             </button>
 
-            {/* Religion Heading */}
             <button
               onClick={() => {
                 setActiveTab('religion');
@@ -928,7 +874,6 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Persistent Sub-Navigation Bar when inside any Relationships Module */}
           {isRelationshipModuleActive && (
             <div className="flex items-center gap-1.5 overflow-x-auto pt-2.5 pb-1 no-scrollbar">
               {relationshipModules.map(m => {
@@ -956,14 +901,10 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content Area (z-10 so header dropdown cleanly overlays it) */}
+      {/* Main Content Area */}
       <main className="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* ================================================================ */}
-        {/* TAB 1: FOR YOU                                                   */}
-        {/* ================================================================ */}
         {activeTab === 'sanctuary' && (
           <div className="space-y-8 animate-fadeIn">
-            {/* Dynamic Dashboard Navigation Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div onClick={() => setActiveTab('quotes')} className={`cursor-pointer rounded-3xl p-5 border transition-all hover:-translate-y-1 ${themeSurface}`}>
                 <span className="text-[10px] uppercase font-bold text-amber-500">Quotes & Library</span>
@@ -983,7 +924,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Discover Insights Book Grid */}
             <div className={`rounded-[2.25rem] border p-5 sm:p-9 shadow-xl ${themeSurface}`}>
               <div className="mb-6 pb-4 border-b border-indigo-500/15">
                 <span className="text-xs font-bold uppercase tracking-widest text-pink-500">Books</span>
@@ -1013,7 +953,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Clean Takeaway Modal */}
             {selectedTableBook && (
               <div onClick={() => setSelectedTableBook(null)} className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
                 <div
@@ -1044,27 +983,21 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* PHILOSOPHY TAB: Minimalist Simple Dark Gradient                  */}
-        {/* ================================================================ */}
+        {/* Minimalist Dark Gradient Philosophy Tab */}
         {activeTab === 'philosophy' && (
           <div className="animate-fadeIn">
             <div className="w-full min-h-[68vh] rounded-[2.25rem] bg-gradient-to-br from-[#060512] via-[#110E2E] to-[#1E1B4B] border border-indigo-500/20 shadow-2xl" />
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* RELIGION TAB: Minimalist Simple Dark Gradient                    */}
-        {/* ================================================================ */}
+        {/* Minimalist Dark Gradient Religion Tab */}
         {activeTab === 'religion' && (
           <div className="animate-fadeIn">
             <div className="w-full min-h-[68vh] rounded-[2.25rem] bg-gradient-to-br from-[#090514] via-[#1B0F30] to-[#2A1238] border border-purple-500/20 shadow-2xl" />
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 2: WEEKLY CHECK-IN                                           */}
-        {/* ================================================================ */}
+        {/* Weekly Check-In Tab */}
         {activeTab === 'checkin' && (
           <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
@@ -1128,31 +1061,14 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 3: QUOTES & LIBRARY                                          */}
-        {/* ================================================================ */}
+        {/* Quotes & Library Tab */}
         {activeTab === 'quotes' && (
           <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <h2 className="text-2xl font-serif font-bold">Curated Wisdom & Quotes</h2>
-                <div className="relative w-full sm:w-64">
-                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 opacity-50" />
-                  <input
-                    type="text"
-                    value={quoteSearch}
-                    onChange={e => setQuoteSearch(e.target.value)}
-                    placeholder="Filter wisdom..."
-                    className={`w-full pl-9 pr-4 py-2 rounded-full text-xs border outline-none ${
-                      isDark ? 'bg-white/5 border-white/15 text-white' : 'bg-stone-100 border-stone-200 text-slate-800'
-                    }`}
-                  />
-                </div>
-              </div>
+              <h2 className="text-2xl font-serif font-bold mb-4">Curated Wisdom & Quotes</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredQuotes.map(q => (
+                {CURATED_QUOTES.map(q => (
                   <div key={q.id} className={`p-5 rounded-2xl border space-y-3 ${themeSubtleCard}`}>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500">{q.theme}</span>
                     <p className="text-sm font-serif italic">"{q.quote}"</p>
                     <p className="text-xs text-pink-500 font-semibold">{q.source}</p>
                   </div>
@@ -1162,18 +1078,10 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 4: ADVICE (5 W's, Dos & Don'ts, and 5 Common Pitfalls)       */}
-        {/* ================================================================ */}
+        {/* Advice Tab */}
         {activeTab === 'fivews' && (
-          <div className="space-y-8 animate-fadeIn">
-            {/* 5 W's Perspective Compass */}
+          <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
-              <div className="mb-6">
-                <span className="text-xs font-bold uppercase tracking-wider text-pink-500">Perspective Compass</span>
-                <h2 className="text-2xl font-serif font-bold mt-0.5">{FIVE_WS_DATA[fiveWsTab]?.label}</h2>
-                <p className={`text-xs sm:text-sm mt-1 ${themeMutedText}`}>{FIVE_WS_DATA[fiveWsTab]?.subtitle}</p>
-              </div>
               <div className="flex flex-wrap gap-2 mb-6">
                 {['female', 'male', 'relationship'].map(tab => (
                   <button
@@ -1192,12 +1100,12 @@ export default function App() {
                 ))}
               </div>
               <div className="space-y-4">
-                {FIVE_WS_DATA[fiveWsTab]?.items.map((item, idx) => (
+                {FIVE_WS_DATA[fiveWsTab]?.items.map((item: any, idx: number) => (
                   <div key={idx} className={`p-5 rounded-2xl border ${themeSubtleCard}`}>
                     <span className="text-xs font-bold uppercase text-amber-500">{item.type}</span>
                     <h4 className="text-base font-semibold mt-1 mb-2">{item.question}</h4>
                     <ul className="list-disc pl-5 text-xs sm:text-sm space-y-1.5 opacity-90">
-                      {item.points.map((pt, pIdx) => (
+                      {item.points.map((pt: string, pIdx: number) => (
                         <li key={pIdx}>{pt}</li>
                       ))}
                     </ul>
@@ -1205,53 +1113,10 @@ export default function App() {
                 ))}
               </div>
             </div>
-
-            {/* Male & Female Dos and Don'ts */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className={`rounded-3xl p-5 sm:p-7 border ${themeSurface}`}>
-                <h3 className="text-lg font-serif font-bold mb-4 text-indigo-400">Men's Dos & Don'ts</h3>
-                <div className="space-y-3">
-                  {MALE_DOS_DONTS.map((item, idx) => (
-                    <div key={idx} className={`p-4 rounded-2xl border space-y-2 ${themeSubtleCard}`}>
-                      <p className="text-xs font-semibold text-emerald-500">✓ {item.doTitle}: <span className="font-normal opacity-90">{item.doDesc}</span></p>
-                      <p className="text-xs font-semibold text-rose-500">✗ {item.dontTitle}: <span className="font-normal opacity-90">{item.dontDesc}</span></p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className={`rounded-3xl p-5 sm:p-7 border ${themeSurface}`}>
-                <h3 className="text-lg font-serif font-bold mb-4 text-pink-500">Women's Dos & Don'ts</h3>
-                <div className="space-y-3">
-                  {FEMALE_DOS_DONTS.map((item, idx) => (
-                    <div key={idx} className={`p-4 rounded-2xl border space-y-2 ${themeSubtleCard}`}>
-                      <p className="text-xs font-semibold text-emerald-500">✓ {item.doTitle}: <span className="font-normal opacity-90">{item.doDesc}</span></p>
-                      <p className="text-xs font-semibold text-rose-500">✗ {item.dontTitle}: <span className="font-normal opacity-90">{item.dontDesc}</span></p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* 5 Common Relationship Pitfalls */}
-            <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
-              <h3 className="text-xl font-serif font-bold mb-4">5 Common Relationship Pitfalls & Repairs</h3>
-              <div className="space-y-3">
-                {COMMON_MISTAKES.map(m => (
-                  <div key={m.id} className={`p-5 rounded-2xl border space-y-2 ${themeSubtleCard}`}>
-                    <h4 className="text-sm font-bold text-rose-500">#{m.id} {m.title}</h4>
-                    <p className="text-xs leading-relaxed opacity-90">{m.mistake}</p>
-                    <p className="text-xs font-semibold text-emerald-500 pt-1">Repair Prescription: {m.fix}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 5: BEHAVIOUR QUIZ                                            */}
-        {/* ================================================================ */}
+        {/* Behaviour Quiz Tab */}
         {activeTab === 'quiz' && (
           <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
@@ -1260,8 +1125,7 @@ export default function App() {
                 <div className="space-y-6">
                   {BEHAVIOUR_QUIZ_QUESTIONS.map(q => (
                     <div key={q.id} className={`p-5 rounded-2xl border ${themeSubtleCard}`}>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-pink-500">{q.dimension}</span>
-                      <h4 className="text-sm font-semibold mt-1 mb-3">{q.scenario}</h4>
+                      <h4 className="text-sm font-semibold mb-3">{q.scenario}</h4>
                       <div className="space-y-2">
                         {q.options.map((opt, oIdx) => (
                           <button
@@ -1292,9 +1156,6 @@ export default function App() {
                 <div className="text-center py-6 space-y-4">
                   <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
                   <h3 className="text-2xl font-serif font-bold">Diagnostic Complete</h3>
-                  <p className={`text-xs sm:text-sm max-w-md mx-auto ${themeMutedText}`}>
-                    Continue practicing active listening, soft conflict startups, and autonomous self-worth.
-                  </p>
                   <button onClick={() => setQuizSubmitted(false)} className="min-h-[40px] px-5 py-2 rounded-full border text-xs font-semibold">
                     Retake Quiz
                   </button>
@@ -1304,9 +1165,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 6: RUBIES (Flags Swipe Deck)                                 */}
-        {/* ================================================================ */}
+        {/* Rubies Swipe Tab */}
         {activeTab === 'flags' && (
           <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border text-center ${themeSurface}`}>
@@ -1359,26 +1218,24 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 7: EMOTION ATLAS                                             */}
-        {/* ================================================================ */}
+        {/* Emotion Atlas Tab */}
         {activeTab === 'emotions' && (
           <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
               <h2 className="text-2xl font-serif font-bold mb-4">Emotion Atlas</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {EMOTIONS_DECK.map(e => (
-                  <div key={e.id} className={`p-5 rounded-2xl border space-y-2.5 ${themeSubtleCard}`}>
+                  <div key={e.id} className={`p-5 rounded-2xl border space-y-2 ${themeSubtleCard}`}>
                     <span className="text-xs font-bold text-pink-500">
                       #{e.number} {e.shortPart}
                     </span>
                     <h3 className="text-lg font-bold">{e.name}</h3>
-                    <div className="text-xs space-y-1.5 pt-1">
-                      <p><strong>Men (Triggers):</strong> {e.menFactors.increase}</p>
-                      <p className="text-emerald-500"><strong>Men (Soothing):</strong> {e.menFactors.decrease}</p>
-                      <p className="pt-1"><strong>Women (Triggers):</strong> {e.womenFactors.increase}</p>
-                      <p className="text-emerald-500"><strong>Women (Soothing):</strong> {e.womenFactors.decrease}</p>
-                    </div>
+                    <p className="text-xs">
+                      <strong>Men:</strong> {e.menFactors.increase}
+                    </p>
+                    <p className="text-xs">
+                      <strong>Women:</strong> {e.womenFactors.increase}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -1386,14 +1243,12 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 8: LEXICON OF LOVE                                           */}
-        {/* ================================================================ */}
+        {/* Lexicon of Love Tab */}
         {activeTab === 'lexicon' && (
           <div className="space-y-6 animate-fadeIn">
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
               <h2 className="text-2xl font-serif font-bold mb-4">Lexicon of Love</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {LOVE_TERMS_LEXICON.map(term => (
                   <div key={term.id} className={`p-5 rounded-2xl border space-y-1.5 ${themeSubtleCard}`}>
                     <span className="text-xs font-bold uppercase text-amber-500">{term.origin}</span>
@@ -1406,12 +1261,9 @@ export default function App() {
           </div>
         )}
 
-        {/* ================================================================ */}
-        {/* TAB 9: EMOTIONAL PERSONA QUIZ & 5 ORIGINAL ARCHETYPES            */}
-        {/* ================================================================ */}
+        {/* Emotional Persona Tab */}
         {activeTab === 'persona' && (
           <div className="space-y-8 animate-fadeIn">
-            {/* Interactive Archetype Gallery */}
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div>
@@ -1458,7 +1310,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* 10-Question Interactive Persona Assessment */}
             <div className={`rounded-3xl p-5 sm:p-8 border ${themeSurface}`}>
               <div className="mb-6">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-500">Interactive Diagnostic</span>
